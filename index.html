@@ -75,7 +75,7 @@
               onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
             />
             <div class="hidden w-full h-full items-center justify-center">
-              <svg viewBox="0 0 64 64" width="64" height="64" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="𑢶𑣀𑣋𑣚">
+              <svg viewBox="0 0 64 64" width="64" height="64" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="𑢶𑣊𑣋𑣚">
                 <defs>
                   <linearGradient id="headerProfileBadgeGrad" x1="0" y1="0" x2="1" y2="1">
                     <stop offset="0%" stop-color="#064e3b" />
@@ -190,16 +190,38 @@
           <div class="flex flex-wrap items-center justify-between gap-2 border-b border-stone-200 pb-3">
             <div>
               <h2 class="text-lg sm:text-xl font-extrabold text-[#14532d]">वारंग क्षिति संपूर्ण वर्णमाला (32 अक्षर)</h2>
-              <p class="text-xs text-slate-500">इपान बोरोङ (Capital U+118A0–U+118BF) एवं बेंगान बोरोङ (Small U+118C0–U+118DF)</p>
+              <p class="text-xs text-slate-500">मरङ ओल् (Capital U+118A0–U+118BF) एवं हुड़िङ ओल् (Small U+118C0–U+118DF) • स्रोत: हो ओल् उनुरुम्</p>
             </div>
-            <div class="flex gap-1.5 text-xs">
+            <div class="flex flex-wrap items-center gap-1.5 text-xs">
               <button type="button" onclick="filterAlpha('all')" id="alpha-f-all" class="px-3 py-1.5 rounded-lg bg-[#14532d] text-white font-bold">सभी (32)</button>
               <button type="button" onclick="filterAlpha('vowel')" id="alpha-f-vowel" class="px-3 py-1.5 rounded-lg bg-stone-100 text-slate-700 font-bold hover:bg-stone-200">स्वर (10)</button>
               <button type="button" onclick="filterAlpha('consonant')" id="alpha-f-consonant" class="px-3 py-1.5 rounded-lg bg-stone-100 text-slate-700 font-bold hover:bg-stone-200">व्यंजन (22)</button>
+              <div class="inline-flex rounded-lg border border-stone-300 overflow-hidden ml-1">
+                <button type="button" onclick="setAlphaView('both')" id="alpha-v-both" class="px-2.5 py-1.5 bg-amber-500 text-slate-950 font-bold">दोनों</button>
+                <button type="button" onclick="setAlphaView('cards')" id="alpha-v-cards" class="px-2.5 py-1.5 bg-white text-slate-700 font-bold hover:bg-stone-100">कार्ड</button>
+                <button type="button" onclick="setAlphaView('table')" id="alpha-v-table" class="px-2.5 py-1.5 bg-white text-slate-700 font-bold hover:bg-stone-100">तालिका</button>
+              </div>
             </div>
           </div>
 
           <div id="alphabet-grid" class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 gap-2.5"></div>
+
+          <!-- 5-Column Book-Accurate Reference Table -->
+          <div id="alphabet-table-wrap" class="overflow-x-auto rounded-xl border border-stone-200">
+            <table class="w-full text-left border-collapse">
+              <thead class="bg-[#14532d] text-white text-xs">
+                <tr>
+                  <th class="py-2.5 px-2.5 text-center">क्र.</th>
+                  <th class="py-2.5 px-2.5 text-center">मरङ ओल् (Capital)</th>
+                  <th class="py-2.5 px-2.5 text-center">हुड़िङ ओल् (Small)</th>
+                  <th class="py-2.5 px-3">पुस्तक में दिया गया उच्चारण (हिन्दी)</th>
+                  <th class="py-2.5 px-3">मानक देवनागरी ध्वनि</th>
+                  <th class="py-2.5 px-3">अंग्रेज़ी (Roman)</th>
+                </tr>
+              </thead>
+              <tbody id="alphabet-tbody" class="divide-y divide-stone-200 text-xs sm:text-sm"></tbody>
+            </table>
+          </div>
         </div>
 
         <div class="space-y-5">
@@ -212,41 +234,53 @@
 
             <div class="flex items-center justify-around bg-stone-50 rounded-2xl p-4 border border-stone-200">
               <div onclick="speakHo(document.getElementById('insp-deva').textContent, this)" class="touch-card text-center px-2 py-1 rounded-xl">
-                <div class="text-[11px] font-bold text-slate-500 mb-1">इपान (Capital) 🔊</div>
+                <div class="text-[11px] font-bold text-slate-500 mb-1">मरङ ओल् (Capital) 🔊</div>
                 <div id="insp-cap" class="wc-font text-5xl font-bold text-[#14532d]">𑢡</div>
               </div>
               <div class="h-12 w-px bg-stone-300"></div>
               <div onclick="speakHo(document.getElementById('insp-deva').textContent, this)" class="touch-card text-center px-2 py-1 rounded-xl">
-                <div class="text-[11px] font-bold text-slate-500 mb-1">बेंगान (Small) 🔊</div>
+                <div class="text-[11px] font-bold text-slate-500 mb-1">हुड़िङ ओल् (Small) 🔊</div>
                 <div id="insp-small" class="wc-font text-5xl font-bold text-amber-700">𑣁</div>
               </div>
             </div>
 
-            <div class="flex items-center justify-between bg-emerald-50 border border-emerald-200 rounded-xl p-3">
-              <div>
-                <div class="text-xs text-emerald-800 font-semibold">देवनागरी एवं English अक्षर नाम</div>
-                <div id="insp-deva" class="text-xl font-extrabold text-[#14532d]">अ / आ</div>
-                <div id="insp-eng" class="text-xs font-mono font-bold text-amber-800 mt-0.5">A (a)</div>
+            <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-3 space-y-2">
+              <div class="flex items-start justify-between gap-2">
+                <div>
+                  <div class="text-[11px] text-emerald-800 font-semibold">पुस्तक में दिया गया उच्चारण (हिन्दी)</div>
+                  <div id="insp-book-pron" class="text-base font-extrabold text-amber-900">अ, आ</div>
+                </div>
+                <button type="button" onclick="speakHo(document.getElementById('insp-deva').textContent, this)" class="px-3.5 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold text-xs shadow-sm transition shrink-0">
+                  🔊 उच्चारण सुनें
+                </button>
               </div>
-              <button type="button" onclick="speakHo(document.getElementById('insp-deva').textContent, this)" class="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold text-xs shadow-sm transition">
-                🔊 उच्चारण सुनें
-              </button>
+              <div class="grid grid-cols-2 gap-2 pt-1.5 border-t border-emerald-200/80">
+                <div>
+                  <div class="text-[11px] text-emerald-800 font-semibold">मानक देवनागरी ध्वनि</div>
+                  <div id="insp-deva" class="text-base font-extrabold text-[#14532d]">अ / आ (ा)</div>
+                </div>
+                <div>
+                  <div class="text-[11px] text-emerald-800 font-semibold">अंग्रेज़ी (Roman)</div>
+                  <div id="insp-eng" class="text-sm font-mono font-bold text-amber-800 mt-0.5">A</div>
+                </div>
+              </div>
             </div>
 
             <div class="text-xs text-slate-700 bg-amber-50/70 border border-amber-200 rounded-xl p-3 leading-relaxed" id="insp-rule">
-              शुरुआत में अ/आ के लिए 𑢡 तथा व्यंजन के दाईं ओर स्पष्ट 'आ की मात्रा (ा)' के लिए 𑣁 लगता है।
+              शब्द के आरंभ में अ/आ के लिए 𑢡 तथा व्यंजन के दाईं ओर स्पष्ट 'आ की मात्रा (ा)' के लिए 𑣁 लगता है।
             </div>
 
-            <div class="bg-stone-50 border border-stone-200 rounded-xl p-3 flex items-center justify-between gap-2">
-              <div onclick="speakHo(document.getElementById('insp-ex-text').textContent, this)" class="touch-card flex-1">
-                <div class="text-[11px] text-slate-500 font-bold">उदाहरण शब्द (छूकर सुनें):</div>
-                <div id="insp-ex-wc" class="wc-font text-xl font-bold text-[#14532d]">𑢡𑣖 • 𑢬𑣁𑣖</div>
-                <div id="insp-ex-text" class="text-xs text-slate-600 font-semibold">अम (तुम) • काम (काम)</div>
+            <div class="bg-stone-50 border border-stone-200 rounded-xl p-3 space-y-2.5">
+              <div class="flex items-center justify-between gap-2">
+                <div class="text-[11px] text-slate-600 font-extrabold">उदाहरण शब्द — कम से कम 5 शब्द (छूकर सुनें):</div>
+                <div class="flex items-center gap-1">
+                  <button type="button" onclick="speakHo(document.getElementById('insp-ex-text').textContent, this)" class="px-2.5 py-1 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-bold">🔊 सभी सुनें</button>
+                  <button type="button" onclick="copyText(document.getElementById('insp-ex-wc').textContent, 'उदाहरण कॉपी किया गया')" class="px-2.5 py-1 rounded-lg bg-[#14532d] hover:bg-emerald-800 text-white text-xs font-semibold">📋 कॉपी</button>
+                </div>
               </div>
-              <div class="flex flex-col gap-1">
-                <button type="button" onclick="speakHo(document.getElementById('insp-ex-text').textContent, this)" class="px-2.5 py-1 rounded-lg bg-amber-500 text-slate-950 text-xs font-bold">🔊 सुनें</button>
-                <button type="button" onclick="copyText(document.getElementById('insp-ex-wc').textContent, 'उदाहरण कॉपी किया गया')" class="px-2.5 py-1 rounded-lg bg-[#14532d] text-white text-xs font-semibold">📋 कॉपी</button>
-              </div>
+              <div id="insp-ex-chips" class="grid grid-cols-1 gap-1.5"></div>
+              <div id="insp-ex-wc" class="hidden">𑢡𑣖 • 𑢬𑣁𑣖 • 𑢡𑣚𑣃 • 𑢡𑣘𑣃 • 𑢡𑣌𑣛𑣁</div>
+              <div id="insp-ex-text" class="hidden">अम (तुम) • काम (काम) • आलु (आलू) • अपु (पिता) • अकड़ा (सभा स्थल)</div>
             </div>
           </div>
 
@@ -510,6 +544,36 @@
           <div id="virtual-kb-grid" class="grid grid-cols-6 sm:grid-cols-8 gap-1.5 pt-1"></div>
         </div>
       </div>
+
+      <!-- Added Interactive 5-10 Examples per Character for Transliteration & Keyboard Practice -->
+      <div class="bg-white rounded-2xl border border-stone-200 p-4 sm:p-5 shadow-sm space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-stone-200 pb-3">
+          <div>
+            <h2 class="text-lg font-extrabold text-[#14532d]">प्रत्येक अक्षर से 5–10 लिप्यंतरण एवं लेखन अभ्यास उदाहरण (32 अक्षर)</h2>
+            <p class="text-xs text-slate-500">किसी भी अक्षर को चुनें और उसके 5–10 शब्दों को सीधे <strong>लिप्यंतरण बॉक्स</strong> या <strong>कीबोर्ड</strong> में डालकर अभ्यास करें व सुनें</p>
+          </div>
+          <span class="px-3 py-1 rounded-full bg-amber-100 text-amber-900 text-xs font-extrabold self-start sm:self-auto">
+            कुल 32 अक्षर • 5–10 शब्द प्रति अक्षर
+          </span>
+        </div>
+
+        <!-- 32 Character Selector Bar -->
+        <div>
+          <label class="block text-xs font-extrabold uppercase tracking-wider text-slate-500 mb-2">32 अक्षरों में से कोई अक्षर चुनें:</label>
+          <div id="kb-ex-char-selector" class="flex flex-wrap gap-1.5"></div>
+        </div>
+
+        <!-- Selected Character 5-10 Examples Display -->
+        <div class="border-t border-stone-200 pt-4 space-y-3">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <h3 id="kb-ex-title" class="text-base sm:text-lg font-extrabold text-[#14532d]"></h3>
+            <button type="button" onclick="playAllKbExamples()" class="px-3.5 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-extrabold transition">
+              🔊 इस अक्षर के सभी उदाहरण सुनें
+            </button>
+          </div>
+          <div id="kb-ex-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5"></div>
+        </div>
+      </div>
     </section>
 
     <!-- ==================== TAB 6: QUIZ ==================== -->
@@ -575,40 +639,40 @@
   </footer>
 
   <script>
-    // ==================== 32 WARANG CITI CHARACTERS (IPAN & BENGAN BORONG) ====================
+    // ==================== 32 WARANG CITI CHARACTERS (MARANG OL & HURING OL) ====================
     const ALPHABET = [
-      { id: 1, type: 'vowel', cap: '𑢠', small: '𑣀', eng: 'NGAA (n)', deva: 'ङा', unicode: 'U+118A0 / U+118C0', rule: 'अनुनासिक / ङ ध्वनि तथा अनुस्वार के लिए प्रयुक्त होता है।', exWc: '𑢶𑣀𑢫𑣚 • 𑢜𑣀𑢫', exText: 'मंगल • रंग' },
-      { id: 2, type: 'vowel', cap: '𑢡', small: '𑣁', eng: 'A (a)', deva: 'अ / आ', unicode: 'U+118A1 / U+118C1', rule: 'शब्द के आरंभ में अ/आ के लिए 𑢡 तथा व्यंजन के दाईं ओर स्पष्ट "आ की मात्रा (ा)" के लिए 𑣁 लगता है।', exWc: '𑢡𑣖 • 𑢬𑣁𑣖', exText: 'अम (तुम) • काम (काम)' },
-      { id: 3, type: 'vowel', cap: '𑢢', small: '𑣂', eng: 'WI (i)', deva: 'वि / इ', unicode: 'U+118A2 / U+118C2', rule: 'ह्रस्व इ (ि) की मात्रा व्यंजन के दाईं ओर जुड़ती है।', exWc: '𑢢𑣘𑣂𑣚 • 𑢬𑣂𑣕𑣁𑣗', exText: 'इपिल (तारा) • किताब' },
-      { id: 4, type: 'vowel', cap: '𑢣', small: '𑣃', eng: 'YU (u)', deva: 'यु / उ', unicode: 'U+118A3 / U+118C3', rule: 'ह्रस्व उ (ु) की मात्रा व्यंजन के दाईं ओर जुड़ती है।', exWc: '𑢣𑣚𑣂 • 𑢷𑣃𑣜𑣃', exText: 'उलि (आम) • बुरु (पहाड़)' },
-      { id: 5, type: 'vowel', cap: '𑢤', small: '𑣄', eng: 'YA (?)', deva: 'या / ः', unicode: 'U+118A4 / U+118C4', rule: 'हो भाषा में अचानक रुकने वाली ध्वनि (ग्लॉटल विराम / विसर्ग ः) के लिए 𑣄 लगता है।', exWc: '𑢴𑣁𑣄 • 𑢷𑣁𑣄', exText: 'दाः (पानी) • बाः (फूल)' },
-      { id: 6, type: 'vowel', cap: '𑢥', small: '𑣅', eng: 'YO (ea)', deva: 'यो', unicode: 'U+118A5 / U+118C5', rule: 'अर्धस्वर य / यो ध्वनि के लिए प्रयुक्त होता है।', exWc: '𑢹𑣉𑣅𑣉 • 𑢮𑣁𑣅', exText: 'होयो (हवा) • जय' },
-      { id: 7, type: 'vowel', cap: '𑢦', small: '𑣆', eng: 'II (ii)', deva: 'ई', unicode: 'U+118A6 / U+118C6', rule: 'दीर्घ ई (ी) की मात्रा व्यंजन के दाईं ओर जुड़ती है।', exWc: '𑢦𑣌 • 𑢳𑣔𑣆', exText: 'ईख • नदी' },
-      { id: 8, type: 'vowel', cap: '𑢧', small: '𑣇', eng: 'UU (uu)', deva: 'ऊ', unicode: 'U+118A7 / U+118C7', rule: 'दीर्घ ऊ (ू) की मात्रा व्यंजन के दाईं ओर जुड़ती है।', exWc: '𑢧𑣓 • 𑢸𑣇𑣚', exText: 'ऊन • फूल' },
-      { id: 9, type: 'vowel', cap: '𑢨', small: '𑣈', eng: 'E (e)', deva: 'ए', unicode: 'U+118A8 / U+118C8', rule: 'ए (े) की मात्रा व्यंजन के दाईं ओर जुड़ती है।', exWc: '𑢨𑣊𑢫𑣁 • 𑢴𑣈𑣞', exText: 'एंगा (माँ) • देश' },
-      { id: 10, type: 'vowel', cap: '𑢩', small: '𑣉', eng: 'O (o)', deva: 'ओ', unicode: 'U+118A9 / U+118C9', rule: 'ओ (ो) की मात्रा व्यंजन के दाईं ओर जुड़ती है।', exWc: '𑢩𑣡𑣄 • 𑢮𑣉𑣙𑣁𑣜', exText: 'ओअः (घर) • जोहार' },
-      { id: 11, type: 'consonant', cap: '𑢪', small: '𑣊', eng: 'ANG (ng)', deva: 'अङ / ं', unicode: 'U+118AA / U+118CA', rule: 'ङ व्यंजन तथा नासिक्य अनुस्वार ध्वनि के लिए।', exWc: '𑢾𑣂𑣊𑢫𑣂', exText: 'सिङगि (सूर्य)' },
-      { id: 12, type: 'consonant', cap: '𑢫', small: '𑣋', eng: 'GA (g)', deva: 'ग', unicode: 'U+118AB / U+118CB', rule: 'ग व्यंजन (छोटा अ अंतर्निहित)।', exWc: '𑢫𑣁𑣛𑣁', exText: 'गाड़ा (नदी)' },
-      { id: 13, type: 'consonant', cap: '𑢬', small: '𑣌', eng: 'KO (k)', deva: 'को / क', unicode: 'U+118AC / U+118CC', rule: 'क व्यंजन (छोटा अ अंतर्निहित)।', exWc: '𑢬𑣖𑣚', exText: 'कमल' },
-      { id: 14, type: 'consonant', cap: '𑢭', small: '𑣍', eng: 'ENY (ny)', deva: 'ञ', unicode: 'U+118AD / U+118CD', rule: 'तालव्य ञ ध्वनि के लिए।', exWc: '𑢮𑣍𑣁𑣓', exText: 'ज्ञान' },
-      { id: 15, type: 'consonant', cap: '𑢮', small: '𑣎', eng: 'YUJ (j)', deva: 'ज', unicode: 'U+118AE / U+118CE', rule: 'ज व्यंजन।', exWc: '𑢮𑣉𑣙𑣁𑣜', exText: 'जोहार' },
-      { id: 16, type: 'consonant', cap: '𑢯', small: '𑣏', eng: 'UC (c/ch)', deva: 'च', unicode: 'U+118AF / U+118CF', rule: 'च व्यंजन।', exWc: '𑢯𑣁𑣓𑣔𑣃', exText: 'चान्दु (चाँद)' },
-      { id: 17, type: 'consonant', cap: '𑢰', small: '𑣐', eng: 'ENN (nn)', deva: 'न / एण', unicode: 'U+118B0 / U+118D0', rule: 'मूर्धन्य ण ध्वनि के लिए।', exWc: '𑢮𑣉𑣐𑣉', exText: 'जोणो (झाड़ू)' },
-      { id: 18, type: 'consonant', cap: '𑢱', small: '𑣑', eng: 'ODD (dd)', deva: 'ड', unicode: 'U+118B1 / U+118D1', rule: 'मूर्धन्य ड व्यंजन।', exWc: '𑢱𑣁𑣌𑣃𑣟𑣁', exText: 'डाकुवा' },
-      { id: 19, type: 'consonant', cap: '𑢲', small: '𑣒', eng: 'TTE (tt)', deva: 'ट', unicode: 'U+118B2 / U+118D2', rule: 'मूर्धन्य ट व्यंजन।', exWc: '𑢲𑣁𑣌𑣁', exText: 'टाका (रुपया)' },
-      { id: 20, type: 'consonant', cap: '𑢳', small: '𑣓', eng: 'NUNG (n)', deva: 'नुङ', unicode: 'U+118B3 / U+118D3', rule: 'दंत्य न व्यंजन।', exWc: '𑢳𑣁𑣙𑣈𑣚', exText: 'नाहेल (हल)' },
-      { id: 21, type: 'consonant', cap: '𑢴', small: '𑣔', eng: 'DA (d)', deva: 'द', unicode: 'U+118B4 / U+118D4', rule: 'दंत्य द व्यंजन।', exWc: '𑢴𑣁𑣜𑣃', exText: 'दारु (पेड़)' },
-      { id: 22, type: 'consonant', cap: '𑢵', small: '𑣕', eng: 'AT (t)', deva: 'अत / त', unicode: 'U+118B5 / U+118D5', rule: 'दंत्य त व्यंजन।', exWc: '𑢵𑣉𑣁', exText: 'तोआ (दूध)' },
-      { id: 23, type: 'consonant', cap: '𑢶', small: '𑣖', eng: 'AM (m)', deva: 'अम / म', unicode: 'U+118B6 / U+118D6', rule: 'म व्यंजन।', exWc: '𑢶𑣊𑢫𑣚', exText: 'मंगल' },
-      { id: 24, type: 'consonant', cap: '𑢷', small: '𑣗', eng: 'BU (b)', deva: 'बु / ब', unicode: 'U+118B7 / U+118D7', rule: 'ब व्यंजन (Capital 𑢷 / Small 𑣗)।', exWc: '𑢷𑣃𑣜𑣃 • 𑢷𑣁𑣄', exText: 'बुरु (पहाड़) • बाः (फूल)' },
-      { id: 25, type: 'consonant', cap: '𑢸', small: '𑣘', eng: 'PU (p)', deva: 'पु / प', unicode: 'U+118B8 / U+118D8', rule: 'प व्यंजन।', exWc: '𑢸𑣉𑣜𑣉𑣗', exText: 'पोरोब (पर्व)' },
-      { id: 26, type: 'consonant', cap: '𑢹', small: '𑣙', eng: 'HIYO (h)', deva: 'हियो / ह', unicode: 'U+118B9 / U+118D9', rule: 'ह व्यंजन (महाप्राण व्यंजन बनाने के लिए भी जुड़ता है)।', exWc: '𑢹𑣁𑣕𑣃', exText: 'हातु (गाँव)' },
-      { id: 27, type: 'consonant', cap: '𑢺', small: '𑣚', eng: 'HOLO (l)', deva: 'होलो / ल', unicode: 'U+118BA / U+118DA', rule: 'ल व्यंजन।', exWc: '𑢺𑣁𑣓𑣔𑣁', exText: 'लान्दा (हँसना)' },
-      { id: 28, type: 'consonant', cap: '𑢻', small: '𑣛', eng: 'HORR (rr)', deva: 'होर / ड़', unicode: 'U+118BB / U+118DB', rule: 'ड़ व्यंजन।', exWc: '𑢹𑣉𑣛𑣉', exText: 'होड़ो (मनुष्य)' },
-      { id: 29, type: 'consonant', cap: '𑢼', small: '𑣜', eng: 'HAR (r)', deva: 'हर / र', unicode: 'U+118BC / U+118DC', rule: 'र व्यंजन।', exWc: '𑢼𑣉𑣌𑣉', exText: 'रोको (मक्खी)' },
-      { id: 30, type: 'consonant', cap: '𑢽', small: '𑣝', eng: 'SSUU (ss)', deva: 'सूसू / श-ष', unicode: 'U+118BD / U+118DD', rule: 'श / ष व्यंजन।', exWc: '𑢽𑣂𑣌𑣝𑣁', exText: 'शिक्षा' },
-      { id: 31, type: 'consonant', cap: '𑢾', small: '𑣞', eng: 'SII (s)', deva: 'सी / स', unicode: 'U+118BE / U+118DE', rule: 'स व्यंजन।', exWc: '𑢾𑣁𑣜𑣎𑣉𑣖', exText: 'सारजोम (साल वृक्ष)' },
-      { id: 32, type: 'consonant', cap: '𑢿', small: '𑣟', eng: 'VIYO (v/w)', deva: 'वियो / व', unicode: 'U+118BF / U+118DF', rule: 'व व्यंजन (𑣁 + 𑣘 के संयोग से बना वर्ण)।', exWc: '𑢡𑣴𑣂𑣟𑣁𑣞𑣁', exText: 'आदिवासी' }
+      { id: 1, type: 'vowel', cap: '𑢠', small: '𑣀', bookPron: 'ओं...ङ / वाँ', deva: 'ङा / अनुनासिक (ँ / ं)', eng: 'Oan / NGAA', unicode: 'U+118A0 / U+118C0', rule: 'अनुनासिक / ङ ध्वनि तथा अनुस्वार के लिए प्रयुक्त होता है।', exWc: '𑢶𑣀𑢫𑣚 • 𑢼𑣀𑢫 • 𑢡𑣀𑣊 • 𑢷𑣉𑣀𑢫𑣁 • 𑢾𑣀𑢫𑣜', exText: 'मंगल (शुभ) • रंग (वर्ण) • अङ (भोर) • बोंगा (देवता) • संगर (शिकार)' },
+      { id: 2, type: 'vowel', cap: '𑢡', small: '𑣁', bookPron: 'अ, आ', deva: 'अ / आ (ा)', eng: 'A', unicode: 'U+118A1 / U+118C1', rule: 'शब्द के आरंभ में अ/आ के लिए 𑢡 तथा व्यंजन के दाईं ओर स्पष्ट "आ की मात्रा (ा)" के लिए 𑣁 लगता है।', exWc: '𑢡𑣖 • 𑢬𑣁𑣖 • 𑢡𑣚𑣃 • 𑢡𑣘𑣃 • 𑢡𑣌𑣛𑣁', exText: 'अम (तुम) • काम (काम) • आलु (आलू) • अपु (पिता) • अकड़ा (सभा स्थल)' },
+      { id: 3, type: 'vowel', cap: '𑢢', small: '𑣂', bookPron: 'विःइ', deva: 'इ (ि)', eng: 'I', unicode: 'U+118A2 / U+118C2', rule: 'ह्रस्व इ (ि) की मात्रा व्यंजन के दाईं ओर जुड़ती है।', exWc: '𑢢𑣘𑣂𑣚 • 𑢢𑣚𑣂 • 𑢢𑣓𑣃𑣊 • 𑢢𑣜𑣂𑣚 • 𑢢𑣕𑣃', exText: 'इपिल (तारा) • इलि (हँड़िया) • इनुङ (खेल) • इरिल (आठ) • इतु (सीखना)' },
+      { id: 4, type: 'vowel', cap: '𑢣', small: '𑣃', bookPron: 'युःउ', deva: 'उ (ु)', eng: 'U', unicode: 'U+118A3 / U+118C3', rule: 'ह्रस्व उ (ु) की मात्रा व्यंजन के दाईं ओर जुड़ती है।', exWc: '𑢣𑣚𑣂 • 𑢷𑣃𑣜𑣃 • 𑢣𑣜𑣂𑣄 • 𑢣𑣖𑣗𑣃𑣚 • 𑢣𑣕𑣃', exText: 'उलि (आम) • बुरु (पहाड़) • उरिः (गाय-बैल) • उम्बुल (छाया) • उतु (सब्जी)' },
+      { id: 5, type: 'vowel', cap: '𑢨', small: '𑣈', bookPron: 'अःए', deva: 'ए (े)', eng: 'E', unicode: 'U+118A8 / U+118C8', rule: 'ए (े) की मात्रा व्यंजन के दाईं ओर जुड़ती है।', exWc: '𑢨𑣊𑢫𑣁 • 𑢨𑣜𑣁 • 𑢨𑣞𑣈𑣚 • 𑢨𑣚𑣁 • 𑢨𑣕𑣉', exText: 'एंगा (माँ) • एरा (पत्नी/महिला) • एसेल (गोरा) • एला (आओ) • एतो (सिखाना)' },
+      { id: 6, type: 'vowel', cap: '𑢩', small: '𑣉', bookPron: 'ओ', deva: 'ओ (ो)', eng: 'O', unicode: 'U+118A9 / U+118C9', rule: 'ओ (ो) की मात्रा व्यंजन के दाईं ओर जुड़ती है।', exWc: '𑢩𑣟𑣁𑣄 • 𑢩𑣕𑣈 • 𑢩𑣚 • 𑢩𑣛𑣁 • 𑢩𑣅𑣜', exText: 'ओवः (घर) • ओते (धरती/खेत) • ओल (लिखना) • ओड़ा (नहाना) • ओयर (तैरना)' },
+      { id: 7, type: 'vowel', cap: '𑢤', small: '𑣄', bookPron: 'यःह', deva: 'अः / विसर्ग (ः)', eng: 'Ah', unicode: 'U+118A4 / U+118C4', rule: 'हो भाषा में अचानक रुकने वाली ध्वनि (ग्लॉटल विराम / विसर्ग ः) के लिए 𑣄 लगता है।', exWc: '𑢴𑣁𑣄 • 𑢷𑣁𑣄 • 𑢬𑣁𑣄 • 𑢹𑣉𑣒𑣉𑣄 • 𑢺𑣁𑣂𑣄', exText: 'दाः (पानी) • बाः (फूल) • काः (कौआ) • होटोः (गर्दन) • लाइः (पेट)' },
+      { id: 8, type: 'vowel', cap: '𑢥', small: '𑣅', bookPron: 'य्हो', deva: 'य / यो', eng: 'Y', unicode: 'U+118A5 / U+118C5', rule: 'अर्धस्वर य / यो ध्वनि के लिए प्रयुक्त होता है।', exWc: '𑢹𑣉𑣅𑣉 • 𑢮𑣂𑣅𑣁 • 𑢶𑣅𑣉𑣖 • 𑢵𑣅𑣈𑣓 • 𑢷𑣂𑣅𑣃𑣜', exText: 'होयो (हवा) • जिया (दादी/नानी) • मयोम (रक्त) • तयेन (मगरमच्छ) • बियुर (घूमना)' },
+      { id: 9, type: 'vowel', cap: '𑢦', small: '𑣆', bookPron: 'ई', deva: 'ई (ी)', eng: 'Ee', unicode: 'U+118A6 / U+118C6', rule: 'दीर्घ ई (ी) की मात्रा व्यंजन के दाईं ओर जुड़ती है।', exWc: '𑢦𑣆𑣖 • 𑢮𑣆 • 𑢷𑣆 • 𑢵𑣆 • 𑢾𑣆', exText: 'ईम (कलेजा) • जी (आत्मा/मन) • बी (पेट भरना) • ती (हाथ) • सी (जोतना)' },
+      { id: 10, type: 'vowel', cap: '𑢧', small: '𑣇', bookPron: 'ऊ', deva: 'ऊ (ू)', eng: 'Uu / Oo', unicode: 'U+118A7 / U+118C7', rule: 'दीर्घ ऊ (ू) की मात्रा व्यंजन के दाईं ओर जुड़ती है।', exWc: '𑢧𑣓 • 𑢳𑣇 • 𑢺𑣇 • 𑢸𑣇𑣄 • 𑢷𑣃𑣜𑣇', exText: 'ऊन (ऊन) • नू (पीना) • लू (खाना परोसना) • पूः (दोना) • बुरु (पर्वत)' },
+      { id: 11, type: 'consonant', cap: '𑢪', small: '𑣊', bookPron: 'ओंङ', deva: 'ङ / ं', eng: 'Ong', unicode: 'U+118AA / U+118CA', rule: 'ङ व्यंजन तथा नासिक्य अनुस्वार ध्वनि के लिए।', exWc: '𑢾𑣂𑣊𑢫𑣂 • 𑢷𑣃𑣚𑣃𑣊 • 𑢴𑣃𑣜𑣊 • 𑢶𑣜𑣊 • 𑢾𑣂𑣕𑣃𑣊', exText: 'सिङगि (सूर्य) • बुलुङ (नमक) • दुरङ (गीत) • मरङ (बड़ा) • सितुङ (धूप)' },
+      { id: 12, type: 'consonant', cap: '𑢫', small: '𑣋', bookPron: 'गोःए', deva: 'ग', eng: 'G', unicode: 'U+118AB / U+118CB', rule: 'ग व्यंजन (छोटा अ अंतर्निहित)।', exWc: '𑢫𑣁𑣛𑣁 • 𑢫𑣖𑣁 • 𑢫𑣂𑣕𑣂𑣚 • 𑢫𑣃𑣓𑣑𑣂 • 𑢫𑣃𑣜𑣃', exText: 'गाड़ा (नदी) • गमा (वर्षा) • गितिल (बालू) • गुन्दि (गाय) • गुरु (शिक्षक)' },
+      { id: 13, type: 'consonant', cap: '𑢬', small: '𑣌', bookPron: 'क', deva: 'क', eng: 'K', unicode: 'U+118AC / U+118CC', rule: 'क व्यंजन (छोटा अ अंतर्निहित)।', exWc: '𑢬𑣔𑣚 • 𑢬𑣒𑣁 • 𑢬𑣕𑣃 • 𑢬𑣃𑣚𑣁 • 𑢬𑣂𑣚𑣂', exText: 'कदल (केला) • कटा (पैर) • कतु (चाकू) • कुला (बाघ) • किलि (गोत्र)' },
+      { id: 14, type: 'consonant', cap: '𑢭', small: '𑣍', bookPron: 'विःञ', deva: 'ञ', eng: 'Yan', unicode: 'U+118AD / U+118CD', rule: 'तालव्य ञ ध्वनि के लिए।', exWc: '𑢡𑣍 • 𑢡𑣚𑣂𑣍 • 𑢷𑣂𑣍 • 𑢵𑣃𑣍 • 𑢡𑣌𑣂𑣍', exText: 'अञ (मैं) • अलिञ (हम दोनों) • बिञ (साँप) • तुञ (तीर मारना) • अकिञ (वे दोनों)' },
+      { id: 15, type: 'consonant', cap: '𑢮', small: '𑣎', bookPron: 'विःज', deva: 'ज', eng: 'J', unicode: 'U+118AE / U+118CE', rule: 'ज व्यंजन।', exWc: '𑢮𑣉𑣙𑣁𑣜 • 𑢮𑣉𑣎𑣉 • 𑢮𑣉𑣖 • 𑢮𑣂𑣚𑣃 • 𑢮𑣃𑣛𑣂', exText: 'जोहार (अभिवादन) • जोजो (इमली) • जोम (खाना) • जिलु (मांस) • जुड़ि (मित्र)' },
+      { id: 16, type: 'consonant', cap: '𑢯', small: '𑣏', bookPron: 'विःच', deva: 'च', eng: 'Ch', unicode: 'U+118AF / U+118CF', rule: 'च व्यंजन।', exWc: '𑢯𑣁𑣓𑣔𑣃𑣄 • 𑢯𑣇𑣚𑣂 • 𑢯𑣈𑣍𑣛𑣈 • 𑢯𑣕𑣉𑣖 • 𑢯𑣃𑣒𑣃', exText: 'चन्दुः (चाँद) • चउलि (चावल) • चेंड़े (चिड़िया) • चतोम (छाता) • चुटु (चूहा)' },
+      { id: 17, type: 'consonant', cap: '𑢰', small: '𑣐', bookPron: 'ऐण', deva: 'ण', eng: 'N', unicode: 'U+118B0 / U+118D0', rule: 'मूर्धन्य ण ध्वनि के लिए।', exWc: '𑢮𑣉𑣐𑣉𑣄 • 𑢸𑣉𑣐𑣉𑣞𑣉 • 𑢬𑣂𑣞𑣐 • 𑢬𑣐𑣁 • 𑢶𑣐𑣁', exText: 'जोनोः (झाड़ू) • पोणोसो (कटहल) • किसण (धनवान) • कणा (अनाज माप) • मणा (मना करना)' },
+      { id: 18, type: 'consonant', cap: '𑢱', small: '𑣑', bookPron: 'ओड्', deva: 'ड', eng: 'D', unicode: 'U+118B1 / U+118D1', rule: 'मूर्धन्य ड व्यंजन।', exWc: '𑢱𑣁𑣌𑣃𑣟𑣁 • 𑢱𑣂𑣓𑣑𑣁 • 𑢱𑣉𑣊𑣋𑣁 • 𑢱𑣓𑣑𑣁𑣄 • 𑢱𑣃𑣌𑣂', exText: 'डाकुवा (प्रचारक) • डिन्डा (कुँवारा) • डोंगा (नाव) • डण्डः (लाठी) • डुकि (पेशाब)' },
+      { id: 19, type: 'consonant', cap: '𑢲', small: '𑣒', bookPron: 'टेःए', deva: 'ट', eng: 'T', unicode: 'U+118B2 / U+118D2', rule: 'मूर्धन्य ट व्यंजन।', exWc: '𑢲𑣌𑣁 • 𑢲𑣃𑣘𑣂 • 𑢲𑣈𑣜 • 𑢲𑣒𑣂 • 𑢲𑣉𑣒𑣁', exText: 'टका (रुपया) • टुपि (टोपी) • टेर (फेंकना) • टटि (टट्टी/बाड़) • टोटा (गोली)' },
+      { id: 20, type: 'consonant', cap: '𑢳', small: '𑣓', bookPron: 'नुःङ', deva: 'न', eng: 'N', unicode: 'U+118B3 / U+118D3', rule: 'दंत्य न व्यंजन।', exWc: '𑢳𑣂𑣔𑣁 • 𑢳𑣃𑣕𑣃𑣖 • 𑢳𑣂𑣜 • 𑢳𑣅𑣚 • 𑢳𑣉𑣋𑣉𑣔', exText: 'निदा (रात) • नुतुम (नाम) • निर (दौड़ना) • नयल (हल) • नोगोद् (मीठा)' },
+      { id: 21, type: 'consonant', cap: '𑢴', small: '𑣔', bookPron: 'दाःअ', deva: 'द', eng: 'D', unicode: 'U+118B4 / U+118D4', rule: 'दंत्य द व्यंजन।', exWc: '𑢴𑣁𑣄 • 𑢴𑣜𑣃 • 𑢴𑣂𑣜𑣂 • 𑢴𑣃𑣚𑣛 • 𑢴𑣃𑣜𑣊', exText: 'दाः (पानी) • दरु (पेड़) • दिरि (पत्थर) • दुलड़ (प्रेम) • दुरङ (गीत)' },
+      { id: 22, type: 'consonant', cap: '𑢵', small: '𑣕', bookPron: 'अत्', deva: 'त', eng: 'T', unicode: 'U+118B5 / U+118D5', rule: 'दंत्य त व्यंजन।', exWc: '𑢵𑣉𑣟𑣁 • 𑢵𑣂𑣞𑣂𑣊 • 𑢵𑣃𑣜 • 𑢵𑣃𑣅𑣃 • 𑢵𑢷𑣈𑣓', exText: 'तोवा (दूध) • तिसिङ (आज) • तुर (उगना) • तुयु (सियार) • तबेन (चिउड़ा)' },
+      { id: 23, type: 'consonant', cap: '𑢶', small: '𑣖', bookPron: 'आम्', deva: 'म', eng: 'M', unicode: 'U+118B6 / U+118D6', rule: 'म व्यंजन।', exWc: '𑢶𑣋𑣈 • 𑢶𑣓𑣑𑣂 • 𑢶𑣜𑣁𑣄 • 𑢶𑣈𑣜𑣉𑣖 • 𑢶𑣃𑣓𑣑𑣁', exText: 'मगे (मागे पर्व) • मण्डि (भात) • मरः (मोर) • मेरोम (बकरी) • मुण्डा (मुखिया)' },
+      { id: 24, type: 'consonant', cap: '𑢷', small: '𑣗', bookPron: 'बू', deva: 'ब', eng: 'B', unicode: 'U+118B7 / U+118D7', rule: 'ब व्यंजन (मरङ ओल् 𑢷 / हुड़िङ ओल् 𑣗)।', exWc: '𑢷𑣃𑣜𑣃 • 𑢷𑣁𑣄 • 𑢷𑣗𑣁 • 𑢷𑣂𑣜 • 𑢷𑣃𑣋𑣂𑣓', exText: 'बुरु (पहाड़) • बाः (फूल) • बबा (धान) • बिर (जंगल) • बुगिन (अच्छा)' },
+      { id: 25, type: 'consonant', cap: '𑢸', small: '𑣘', bookPron: 'पुःउ', deva: 'प', eng: 'P', unicode: 'U+118B8 / U+118D8', rule: 'प व्यंजन।', exWc: '𑢸𑣉𑣜𑣉𑣗 • 𑢸𑣃𑣕𑣖 • 𑢸𑣃𑣞𑣂 • 𑢸𑣖𑣘𑣚 • 𑢸𑣃𑣌𑣃𑣜𑣂', exText: 'पोरोब (पर्व) • पुतम (पण्डुक पक्षी) • पुसि (बिल्ली) • पम्पल (तितली) • पुकुरि (तालाब)' },
+      { id: 26, type: 'consonant', cap: '𑢹', small: '𑣙', bookPron: 'हयो', deva: 'ह', eng: 'H', unicode: 'U+118B9 / U+118D9', rule: 'ह व्यंजन (महाप्राण व्यंजन बनाने के लिए भी जुड़ता है)।', exWc: '𑢹𑣁𑣕𑣃 • 𑢹𑣉𑣜𑣁 • 𑢹𑣌𑣃 • 𑢹𑣕𑣂 • 𑢹𑣉𑣅𑣉', exText: 'हातु (गाँव) • होरा (रास्ता) • हकु (मछली) • हति (हाथी) • होयो (हवा)' },
+      { id: 27, type: 'consonant', cap: '𑢺', small: '𑣚', bookPron: 'हलो', deva: 'ल', eng: 'L', unicode: 'U+118BA / U+118DA', rule: 'ल व्यंजन।', exWc: '𑢺𑣁𑣓𑣔𑣁 • 𑢺𑣃𑣕𑣃𑣜 • 𑢺𑣈𑣚 • 𑢺𑣉𑣚𑣉 • 𑢺𑣂𑣎𑣁𑣄', exText: 'लान्दा (हँसना) • लुतुर (कान) • लेल (देखना) • लोलो (गर्म) • लिजः (कपड़ा)' },
+      { id: 28, type: 'consonant', cap: '𑢻', small: '𑣛', bookPron: 'हड़', deva: 'ड़', eng: 'D, R', unicode: 'U+118BB / U+118DB', rule: 'ड़ व्यंजन।', exWc: '𑢹𑣉𑣛𑣉 • 𑢫𑣛𑣁 • 𑢮𑣃𑣛𑣂 • 𑢴𑣃𑣚𑣛 • 𑢬𑣃𑣛𑣂', exText: 'होड़ो (मनुष्य) • गड़ा (नदी) • जुड़ि (साथी) • दुलड़ (प्रेम) • कुड़ि (लड़की)' },
+      { id: 29, type: 'consonant', cap: '𑢼', small: '𑣜', bookPron: 'हर्र', deva: 'र', eng: 'R', unicode: 'U+118BC / U+118DC', rule: 'र व्यंजन।', exWc: '𑢼𑣁𑣎𑣁 • 𑢼𑣃𑣕𑣃 • 𑢼𑣂𑣖𑣂𑣚 • 𑢼𑣓𑣃 • 𑢼𑣃𑣘𑣁', exText: 'राजा (राजा) • रुतु (बाँसुरी) • रिमिल (बादल) • रनु (औषधि) • रुपा (चाँदी)' },
+      { id: 30, type: 'consonant', cap: '𑢽', small: '𑣝', bookPron: 'सूसू', deva: 'ष / श', eng: 'Sh', unicode: 'U+118BD / U+118DD', rule: 'श / ष व्यंजन।', exWc: '𑢽𑣂𑣌𑣝𑣁 • 𑢽𑣃𑣌𑣃𑣜𑣁𑣙𑣁𑣜 • 𑢽𑣃𑣌𑣓 • 𑢽𑣃𑣖 • 𑢽𑣂𑣜𑣖𑣁', exText: 'शिक्षा (पढ़ाई) • शुकुराहर (शुक्रवार) • शुकन (नवम्बर) • षुम (सूंघना) • षिरमा (आकाश)' },
+      { id: 31, type: 'consonant', cap: '𑢾', small: '𑣞', bookPron: 'सी', deva: 'स', eng: 'S', unicode: 'U+118BE / U+118DE', rule: 'स व्यंजन।', exWc: '𑢾𑣁𑣜𑣎𑣉𑣖 • 𑢾𑣈𑣊𑣋𑣈𑣚 • 𑢾𑣂𑣊𑢫𑣂 • 𑢾𑣃𑣞𑣃𑣓 • 𑢾𑣈𑣕𑣁', exText: 'सारजोम (साल वृक्ष) • सेंगेल (आग) • सिङगि (सूर्य) • सुसुन (नाचना) • सेता (कुत्ता)' },
+      { id: 32, type: 'consonant', cap: '𑢿', small: '𑣟', bookPron: 'वियो (𑣁 + 𑣘 संयोग)', deva: 'व', eng: 'V / W', unicode: 'U+118BF / U+118DF', rule: 'व व्यंजन (𑣁 + 𑣘 के संयोग से बना वर्ण)।', exWc: '𑢾𑣈𑣟𑣁 • 𑢩𑣟𑣁𑣄 • 𑢴𑣃𑣟𑣜 • 𑢼𑣉𑣟𑣁 • 𑢵𑣉𑣟𑣁', exText: 'सेवा (सेवा) • ओवः (घर) • दुवर (दरवाजा) • रोवा (आत्मा) • तोवा (दूध)' }
     ];
 
     const DIGITS = [
@@ -1396,7 +1460,240 @@
       { wc: '𑢵𑣃𑣞𑣂𑣊', ho: 'तुसिङ (tusi)', en: 'to wear, put on clothes/ornaments', hi: 'पहनना', cat: 'verb' },
       { wc: '𑢵𑣃𑣕𑣌𑣃𑣓', ho: 'तुत्कुन (tutkun)', en: 'cold (weather/water)', hi: 'ठण्डा', cat: 'nature' },
       { wc: '𑢢𑣟𑣁 / 𑢥𑣈𑣜𑣁', ho: 'इवा / येरा (era/yera)', en: 'woman, lady, goddess', hi: 'स्त्री, महिला, देवी', cat: 'family' },
-      { wc: '𑢥𑣉 / 𑢤𑣁', ho: 'यो / या (yo / ya)', en: 'semivowel & glottal phonetic markers', hi: 'अर्धस्वर \'य\' एवं विराम चिह्न', cat: 'greeting' }
+      { wc: '𑢥𑣉 / 𑢤𑣁', ho: 'यो / या (yo / ya)', en: 'semivowel & glottal phonetic markers', hi: 'अर्धस्वर \'य\' एवं विराम चिह्न', cat: 'greeting' },
+
+      // ==================== ADDITIONAL AUTHENTIC HO WORDS (DAYS, MONTHS, NATURE, BODY, FAMILY, VERBS) ====================
+      { wc: '𑢼𑣃𑣂𑣙𑣜', ho: 'रुइहर (ruihar)', en: 'Sunday', hi: 'रविवार', cat: 'greeting' },
+      { wc: '𑢾𑣃𑣖𑣂𑣙𑣜', ho: 'सुमिहर (sumihar)', en: 'Monday', hi: 'सोमवार', cat: 'greeting' },
+      { wc: '𑢶𑣃𑣊𑢫𑣃𑣛𑣃𑣙𑣜', ho: 'मुंगुड़ुहर (munguruhar)', en: 'Tuesday', hi: 'मंगलवार', cat: 'greeting' },
+      { wc: '𑢷𑣃𑣔𑣃𑣙𑣜', ho: 'बुदुहर (buduhar)', en: 'Wednesday', hi: 'बुधवार', cat: 'greeting' },
+      { wc: '𑢫𑣃𑣜𑣙𑣜', ho: 'गुरहर (gurahar)', en: 'Thursday', hi: 'गुरुवार', cat: 'greeting' },
+      { wc: '𑢽𑣃𑣌𑣃𑣜𑣙𑣜', ho: 'शुकुरहर (shukurahar)', en: 'Friday', hi: 'शुक्रवार', cat: 'greeting' },
+      { wc: '𑢽𑣃𑣓𑣂𑣙𑣜', ho: 'शुनिहर (shunihar)', en: 'Saturday', hi: 'शनिवार', cat: 'greeting' },
+      { wc: '𑢷𑣔𑣂', ho: 'बदि (badi)', en: 'traditional Ho month (February)', hi: 'फाल्गुन महीना (फरवरी)', cat: 'nature' },
+      { wc: '𑢾𑣈𑣓𑣔𑣜𑣁', ho: 'सेंदरा (sendra)', en: 'hunting festival month (March)', hi: 'चैत / शिकार पर्व महीना (मार्च)', cat: 'greeting' },
+      { wc: '𑢹𑣘𑣚', ho: 'हपल (hapal)', en: 'traditional Ho month (April)', hi: 'वैशाख महीना (अप्रैल)', cat: 'nature' },
+      { wc: '𑢷𑣘𑣚', ho: 'बपल (bapal)', en: 'traditional Ho month (May)', hi: 'ज्येष्ठ महीना (मई)', cat: 'nature' },
+      { wc: '𑢡𑣏𑣛𑣁', ho: 'अचड़ा (achara)', en: 'sowing season month (June)', hi: 'आषाढ़ महीना (जून)', cat: 'food' },
+      { wc: '𑢡𑣕𑣈𑣓', ho: 'अतेन (aten)', en: 'traditional Ho month (July)', hi: 'श्रावण महीना (जुलाई)', cat: 'nature' },
+      { wc: '𑢡𑣔𑣉𑣜', ho: 'अदोर (ador)', en: 'traditional Ho month (August)', hi: 'भाद्रपद महीना (अगस्त)', cat: 'nature' },
+      { wc: '𑢬𑣉𑣙𑣜𑣁', ho: 'कोहरा (kohra)', en: 'traditional Ho month (September)', hi: 'आश्विन महीना (सितम्बर)', cat: 'nature' },
+      { wc: '𑢽𑣃𑣌𑣓', ho: 'शुकन (shukan)', en: 'traditional Ho month (November)', hi: 'अग्रहायण महीना (नवम्बर)', cat: 'nature' },
+      { wc: '𑢾𑣜𑣔𑣂', ho: 'सरदि (sardi)', en: 'winter harvest month (December)', hi: 'पौष महीना (दिसम्बर)', cat: 'nature' },
+      { wc: '𑢡𑣗𑣉𑣖', ho: 'अबोम (abom)', en: 'to wash another person\'s face', hi: 'मुँह धुलाना', cat: 'verb' },
+      { wc: '𑢡𑣏𑣁𑣜', ho: 'अचार (achar)', en: 'pickle, preserved sour fruit', hi: 'अचार', cat: 'food' },
+      { wc: '𑢡𑣔𑣁𑣚𑣂', ho: 'अदालि (adali)', en: 'eight-anna coin, half rupee', hi: 'अठन्नी, आधा रुपया', cat: 'greeting' },
+      { wc: '𑢡𑢱𑣋𑣉𑣖', ho: 'अडगोम (adgom)', en: 'to promise a sacrifice', hi: 'बलि की मन्नत करना', cat: 'greeting' },
+      { wc: '𑢡𑣋𑣁𑣖', ho: 'अगाम (agam)', en: 'future, prophecy, foretelling', hi: 'भविष्य, भविष्यवाणी', cat: 'greeting' },
+      { wc: '𑢡𑣙𑣜', ho: 'अहर (ahar)', en: 'food, diet, nourishment', hi: 'आहार, भोजन', cat: 'food' },
+      { wc: '𑢡𑣂𑣖𑣁', ho: 'अइमा (aima)', en: 'many, much, abundant', hi: 'अनेक, बहुत अधिक', cat: 'greeting' },
+      { wc: '𑢡𑣎𑣁𑣜', ho: 'अजार (ajar)', en: 'sickness, epidemic disease', hi: 'महामारी, रोग', cat: 'greeting' },
+      { wc: '𑢡𑣌𑣂𑣔', ho: 'अकिद् (akid)', en: 'to pick up with beak or fingers', hi: 'चोंच या उँगली से उठाना', cat: 'verb' },
+      { wc: '𑢡𑣚𑣋', ho: 'अलग (alag)', en: 'separate, different', hi: 'अलग, भिन्न', cat: 'greeting' },
+      { wc: '𑢡𑣚𑣌𑣁', ho: 'अलका (alka)', en: 'easy, light, not difficult', hi: 'आसान, सरल', cat: 'greeting' },
+      { wc: '𑢡𑣖𑣋𑣁', ho: 'अमगा (amga)', en: 'you indeed (emphatic)', hi: 'तुम ही', cat: 'family' },
+      { wc: '𑢡𑣓𑣔𑣉𑣜', ho: 'अन्दोर (andor)', en: 'tumult, uproar, noise', hi: 'शोरगुल, कोलाहल', cat: 'greeting' },
+      { wc: '𑢡𑣊𑢫𑣁', ho: 'अङगा (anga)', en: 'until dawn, whole night', hi: 'रात भर, भोर तक', cat: 'nature' },
+      { wc: '𑢡𑣘𑣁𑣗𑣁𑣜𑣈', ho: 'अपबारे (apabare)', en: 'parents, elders', hi: 'माता-पिता, अभिभावक', cat: 'family' },
+      { wc: '𑢡𑣜𑣋𑣃', ho: 'अरगु (argu)', en: 'to bring down, unload', hi: 'नीचे उतारना', cat: 'verb' },
+      { wc: '𑢡𑣞𑣁𑣛', ho: 'असाड़ (asar)', en: 'rainy month of Ashadh', hi: 'आषाढ़ माह', cat: 'nature' },
+      { wc: '𑢡𑣕𑣊', ho: 'अतङ (atang)', en: 'to receive with both hands', hi: 'दोनों हाथों से ग्रहण करना', cat: 'verb' },
+      { wc: '𑢡𑣕𑣂𑣊', ho: 'अतिङ (ating)', en: 'to graze (of cattle)', hi: 'चरना (पशुओं का)', cat: 'verb' },
+      { wc: '𑢷𑣁𑣄 𑢸𑣉𑣜𑣉𑣗', ho: 'बाः पोरोब (bā porob)', en: 'spring flower festival of Ho tribe', hi: 'बाहा / बाः पर्व (वसंत उत्सव)', cat: 'greeting' },
+      { wc: '𑢷𑣔𑣉𑣚𑣂', ho: 'बदोलि (badoli)', en: 'exchange of labour in farming', hi: 'बदली मजदूरी / श्रम विनिमय', cat: 'food' },
+      { wc: '𑢷𑣋𑣂𑣏𑣁', ho: 'बगिचा (bagicha)', en: 'orchard, garden', hi: 'बगीचा, उद्यान', cat: 'nature' },
+      { wc: '𑢷𑣂𑣔𑣅𑣁', ho: 'बइदया (baidya)', en: 'herbal physician, doctor', hi: 'वैद्य, चिकित्सक', cat: 'greeting' },
+      { wc: '𑢷𑣌𑣜𑣁', ho: 'बकरा (bakara)', en: 'he-goat', hi: 'बकरा', cat: 'nature' },
+      { wc: '𑢷𑣚𑣂', ho: 'बलि (bali)', en: 'door leaf, shutter', hi: 'किवाड़, दरवाजे का पल्ला', cat: 'food' },
+      { wc: '𑢷𑣓𑣔𑣜', ho: 'बन्दर (bandar)', en: 'monkey', hi: 'बन्दर', cat: 'nature' },
+      { wc: '𑢷𑣊𑢫𑣃𑣜𑣃', ho: 'बंगुरु (banguru)', en: 'large hill, mountain peak', hi: 'बड़ा पहाड़, पर्वत शिखर', cat: 'nature' },
+      { wc: '𑢷𑣜𑣁𑣗𑣜𑣂', ho: 'बराबरी (barabari)', en: 'equal, equality', hi: 'बराबरी, समानता', cat: 'greeting' },
+      { wc: '𑢷𑣜𑣔𑣃𑣛𑣂', ho: 'बरदुड़ि (barduri)', en: 'flying fox, large fruit bat', hi: 'बड़ा चमगादड़', cat: 'nature' },
+      { wc: '𑢷𑣜𑣌𑣁', ho: 'बरका (barka)', en: 'thick cotton sheet / blanket', hi: 'मोटी चादर / कम्बल', cat: 'greeting' },
+      { wc: '𑢷𑣞𑣁', ho: 'बसा (basa)', en: 'lodging, temporary shelter', hi: 'डेरा, अस्थायी निवास', cat: 'food' },
+      { wc: '𑢷𑣕𑣂', ho: 'बति (bati)', en: 'lamp, wick, brass bowl', hi: 'दीपक, बत्ती, कटोरी', cat: 'food' },
+      { wc: '𑢷𑣈𑣋𑣜', ho: 'बेगर (begar)', en: 'without, except', hi: 'बिना, के सिवाय', cat: 'greeting' },
+      { wc: '𑢷𑣈𑣚𑣁', ho: 'बेला (bela)', en: 'time, occasion, cup', hi: 'वेला, समय, प्याला', cat: 'greeting' },
+      { wc: '𑢷𑣈𑣓𑣔𑣁', ho: 'बेन्दा (benda)', en: 'bamboo band for binding paddy', hi: 'धान बाँधने की रस्सी', cat: 'food' },
+      { wc: '𑢷𑣈𑣜𑣁', ho: 'बेरा (bera)', en: 'sun, time of day', hi: 'सूर्य, समय', cat: 'nature' },
+      { wc: '𑢷𑣂𑣔𑣔𑣂𑣜𑣂', ho: 'बिददिरि (biddiri)', en: 'memorial stone pillar', hi: 'स्मृति पत्थर (ससनदिरी)', cat: 'greeting' },
+      { wc: '𑢷𑣂𑣋𑣜', ho: 'बिगर (bigar)', en: 'without', hi: 'बगैर, बिना', cat: 'greeting' },
+      { wc: '𑢷𑣂𑣎𑣂𑣚', ho: 'बिजिल (bijil)', en: 'glossy, shining, bright', hi: 'चमकीला, उज्ज्वल', cat: 'nature' },
+      { wc: '𑢷𑣂𑣚𑣂', ho: 'बिलि (bili)', en: 'ripe (of fruit), testicle', hi: 'पका हुआ (फल)', cat: 'food' },
+      { wc: '𑢷𑣂𑣓𑣔𑣂', ho: 'बिन्दि (bindi)', en: 'earring, forehead mark', hi: 'कर्णफूल, बिन्दी', cat: 'greeting' },
+      { wc: '𑢷𑣂𑣜𑣔𑣂𑣜𑣂', ho: 'बिरदिरि (birdiri)', en: 'forest rock, boulder', hi: 'जंगल की चट्टान', cat: 'nature' },
+      { wc: '𑢷𑣂𑣞𑣃𑣟𑣁𑣞', ho: 'बिसुवास (bisuwas)', en: 'trust, faith, belief', hi: 'विश्वास, भरोसा', cat: 'greeting' },
+      { wc: '𑢷𑣉𑣗𑣉', ho: 'बोबो (bobo)', en: 'baby talk for water / drink', hi: 'पानी (बच्चों की बोली)', cat: 'family' },
+      { wc: '𑢷𑣉𑣋𑣉𑣛', ho: 'बोगोड़ (bogor)', en: 'to crumble, fall apart', hi: 'भुरभुरा होकर गिरना', cat: 'verb' },
+      { wc: '𑢷𑣉𑣚𑣉𑣊', ho: 'बोलोङ (bolong)', en: 'to enter into', hi: 'भीतर प्रवेश करना', cat: 'verb' },
+      { wc: '𑢷𑣉𑣜𑣉𑣊', ho: 'बोरोङ (borong)', en: 'letter, alphabet character', hi: 'अक्षर, वर्ण', cat: 'greeting' },
+      { wc: '𑢷𑣃𑣔𑣂', ho: 'बुदि (budi)', en: 'wisdom, intelligence, mind', hi: 'बुद्धि, समझ', cat: 'greeting' },
+      { wc: '𑢷𑣃𑣋𑣂𑣚𑣈𑣌𑣁', ho: 'बुगिलेका (bugileka)', en: 'well, properly, nicely', hi: 'अच्छी तरह से', cat: 'greeting' },
+      { wc: '𑢷𑣃𑣌𑣁', ho: 'बुका (buka)', en: 'heart, chest, courage', hi: 'हृदय, छाती, साहस', cat: 'family' },
+      { wc: '𑢷𑣃𑣚', ho: 'बुल (bul)', en: 'intoxicated, drunk', hi: 'नशा, मदहोश', cat: 'greeting' },
+      { wc: '𑢷𑣃𑣜𑣃 𑢷𑣉𑣊𑢫𑣁', ho: 'बुरु बोंगा (buru bonga)', en: 'deity of mountains and hills', hi: 'पहाड़ देवता (बुरु बोंगा)', cat: 'greeting' },
+      { wc: '𑢯𑣁𑣔𑣂', ho: 'चादि (chadi)', en: 'bald, bare', hi: 'गंजा, खाली', cat: 'family' },
+      { wc: '𑢯𑣌𑣜', ho: 'चकर (chakar)', en: 'wide, broad', hi: 'चौड़ा', cat: 'nature' },
+      { wc: '𑢯𑣚𑣁𑣌𑣂', ho: 'चलाकि (chalaki)', en: 'cleverness, cunning', hi: 'चालाकी, चतुराई', cat: 'greeting' },
+      { wc: '𑢯𑣖𑣘𑣁', ho: 'चम्पा (champa)', en: 'champa flower tree', hi: 'चम्पा का फूल', cat: 'nature' },
+      { wc: '𑢯𑣓𑣔𑣁', ho: 'चन्दा (chanda)', en: 'subscription, contribution', hi: 'चन्दा, सहयोग राशि', cat: 'greeting' },
+      { wc: '𑢯𑣊𑢫𑣜𑣂', ho: 'चंगरि (changari)', en: 'flat bamboo basket', hi: 'बाँस की टोकरी / डलिया', cat: 'food' },
+      { wc: '𑢯𑣘𑣁𑣛𑣁', ho: 'चपाड़ा (chapara)', en: 'flat, level', hi: 'चपटा, समतल', cat: 'nature' },
+      { wc: '𑢯𑣜𑣂𑣄', ho: 'चरिः (chari:)', en: 'bamboo pin for stitching leaf plates', hi: 'पत्तल सीने की तीली (खरिका)', cat: 'food' },
+      { wc: '𑢯𑣕𑣂', ho: 'चति (chati)', en: 'chest, breast', hi: 'छाती, वक्ष', cat: 'family' },
+      { wc: '𑢯𑣈𑣚𑣁', ho: 'चेला (chela)', en: 'disciple, student, pupil', hi: 'चेला, शिष्य, विद्यार्थी', cat: 'greeting' },
+      { wc: '𑢯𑣈𑣘𑣈𑣔', ho: 'चेपेद् (cheped)', en: 'flat, compressed, to suck', hi: 'चपटा, चूसना', cat: 'verb' },
+      { wc: '𑢯𑣂𑣌𑣓', ho: 'चिकन (chikan)', en: 'smooth, slippery, glossy', hi: 'चिकना', cat: 'nature' },
+      { wc: '𑢯𑣂𑣚𑣁𑣊', ho: 'चिलाङ (chilang)', en: 'earthen cooking pot', hi: 'मिट्टी की हाँड़ी', cat: 'food' },
+      { wc: '𑢯𑣂𑣓𑣙𑣁', ho: 'चिन्हा (chinha)', en: 'sign, mark, symbol', hi: 'चिह्न, निशान, प्रतीक', cat: 'greeting' },
+      { wc: '𑢯𑣂𑣜𑣃', ho: 'चिरु (chiru)', en: 'thatching grass (Imperata)', hi: 'छप्पर छाने की खर घास', cat: 'nature' },
+      { wc: '𑢯𑣉𑣛𑣁', ho: 'चोड़ा (chora)', en: 'thief, to steal', hi: 'चोर', cat: 'greeting' },
+      { wc: '𑢯𑣃𑣌𑣃𑣣', ho: 'चुकुउ (chukuu)', en: 'small earthen pitcher', hi: 'चुक्का, छोटा घड़ा', cat: 'food' },
+      { wc: '𑢯𑣃𑣜𑣂', ho: 'चुरि (churi)', en: 'bangle', hi: 'चूड़ी', cat: 'greeting' },
+      { wc: '𑢴𑣁𑣚𑣁', ho: 'दाला (dala)', en: 'bamboo tray / basket', hi: 'डाला, बाँस का सूप', cat: 'food' },
+      { wc: '𑢴𑣚𑣂', ho: 'दलि (dali)', en: 'pulses, lentils (dal)', hi: 'दाल', cat: 'food' },
+      { wc: '𑢱𑣖𑣗𑣁𑣣', ho: 'डम्बाउ (dambau)', en: 'pomelo / large citrus fruit', hi: 'चकोतरा / बड़ा नींबू', cat: 'food' },
+      { wc: '𑢴𑣓𑣔𑣁', ho: 'दन्दा (danda)', en: 'wonder, surprise, riddle', hi: 'आश्चर्य, पहेली', cat: 'greeting' },
+      { wc: '𑢴𑣜𑣁', ho: 'दरा (dara)', en: 'price, rate, custom', hi: 'दर, भाव, रीति', cat: 'greeting' },
+      { wc: '𑢴𑣕𑣃𑣓', ho: 'दतुन (datun)', en: 'twig toothbrush', hi: 'दातून', cat: 'food' },
+      { wc: '𑢴𑣈𑣗𑣁', ho: 'देबा (deba)', en: 'left hand, left side', hi: 'बायाँ हाथ', cat: 'family' },
+      { wc: '𑢴𑣈𑣜𑣁', ho: 'देरा (dera)', en: 'camp, temporary residence', hi: 'डेरा, ठहरने का स्थान', cat: 'food' },
+      { wc: '𑢱𑣂𑣗𑣜𑣂', ho: 'डिबरी (dibari)', en: 'small kerosene / oil lamp', hi: 'ढिबरी, छोटा दीया', cat: 'food' },
+      { wc: '𑢴𑣂𑣔𑣂', ho: 'दिदि (didi)', en: 'vulture', hi: 'गिद्ध', cat: 'nature' },
+      { wc: '𑢱𑣂𑣊𑢬𑣂', ho: 'डिंकि (dinki)', en: 'wooden pedal rice-husker', hi: 'ढेंकी (धान कूटने का यंत्र)', cat: 'food' },
+      { wc: '𑢴𑣉𑣗𑣁', ho: 'दोबा (doba)', en: 'puddle, small pool of water', hi: 'गड्ढा, छोटा ताल', cat: 'nature' },
+      { wc: '𑢴𑣉𑣛𑣁', ho: 'दोड़ा (dora)', en: 'waist-thread worn by men/children', hi: 'करधनी, कमर का धागा', cat: 'greeting' },
+      { wc: '𑢴𑣃𑣛𑣃', ho: 'दुड़ु (duru)', en: 'quail / bush bird', hi: 'बटेर / झाड़ी की चिड़िया', cat: 'nature' },
+      { wc: '𑢨𑣗𑣈𑣓', ho: 'एबेन (eben)', en: 'you two', hi: 'तुम दोनों', cat: 'family' },
+      { wc: '𑢨𑣌𑣁𑣚', ho: 'एकाल (ekal)', en: 'exceedingly, completely, at all', hi: 'बिल्कुल, अत्यधिक', cat: 'greeting' },
+      { wc: '𑢵𑛃𑣅', ho: 'तड़य (taray)', en: 'starlight, bright', hi: 'तारा, चमक', cat: 'nature' },
+      { wc: '𑢣𑣌𑣃𑣛', ho: 'उकुड़ (ukur)', en: 'elbow', hi: 'कोहनी', cat: 'family' },
+      { wc: '𑢡𑣗𑣜𑣃𑣖', ho: 'अबरुम (abarum)', en: 'of a hen, to sit on eggs', hi: 'अंडा सेना, पंखों में छिपाना', cat: 'verb' },
+      { wc: '𑢺𑣁𑣂𑣄', ho: 'लाइः (lāi:)', en: 'stomach', hi: 'पेट', cat: 'family' },
+      { wc: '𑢺𑣂𑣊𑣋𑣂', ho: 'लिंगि (lingi)', en: 'to flow', hi: 'बहना', cat: 'verb' },
+      { wc: '𑢶𑣚𑣏𑣂', ho: 'मलचि / मर्चि (marchi)', en: 'chilli, pepper', hi: 'मिर्च', cat: 'food' },
+      { wc: '𑢶𑣓𑣂 𑢡𑣁𑣄', ho: 'मनि आः (mani ā:)', en: 'mustard plant & greens', hi: 'सरसों साग', cat: 'food' },
+      { wc: '𑢶𑣈𑣜𑣈𑣚 𑢴𑣜𑣃', ho: 'मेरेल दरु (merel daru)', en: 'emblic myrobalan (amla) tree', hi: 'आँवला का पेड़', cat: 'nature' },
+      { wc: '𑢸𑣉𑣐𑣉𑣞𑣉', ho: 'पोणोसो (ponoso)', en: 'jackfruit', hi: 'कटहल', cat: 'food' },
+      { wc: '𑢬𑣐𑣁', ho: 'कणा (kana)', en: 'grain measure', hi: 'अनाज माप', cat: 'food' },
+      { wc: '𑢶𑣐𑣁', ho: 'मणा (mana)', en: 'to forbid', hi: 'मना करना', cat: 'verb' },
+      { wc: '𑢲𑣃𑣘𑣂', ho: 'टुपि (tupi)', en: 'cap, hat', hi: 'टोपी', cat: 'greeting' },
+      { wc: '𑢲𑣒𑣂', ho: 'टटि (tati)', en: 'bamboo screen / fence', hi: 'टट्टी / बाड़', cat: 'food' },
+      { wc: '𑢲𑣉𑣒𑣁', ho: 'टोटा (tota)', en: 'bullet, cartridge', hi: 'गोली', cat: 'greeting' },
+      { wc: '𑢲𑣃𑣊𑣌𑣂', ho: 'टुंकि (tunki)', en: 'medium-sized basket', hi: 'टोकरी', cat: 'food' },
+      { wc: '𑢽𑣂𑣌𑣝𑣁', ho: 'शिक्षा (shiksha)', en: 'education, study', hi: 'पढ़ाई / शिक्षा', cat: 'greeting' },
+      { wc: '𑢽𑣃𑣖', ho: 'षुम (shum)', en: 'to smell, sniff', hi: 'सूंघना', cat: 'verb' },
+      { wc: '𑢽𑣂𑣜𑣖𑣁', ho: 'षिरमा (shirma)', en: 'sky, heaven', hi: 'आकाश', cat: 'nature' },
+      { wc: '𑢽𑣉𑣌𑣁', ho: 'षोका (shoka)', en: 'spirit medium / diviner', hi: 'षोका', cat: 'greeting' },
+
+      // ==================== NEW WORDS FROM KAJI-BURU HO-HINDI-WARANG CITI DICTIONARY ====================
+      { wc: '𑢡𑣚𑣅', ho: 'अलय (alay)', en: 'carelessness, warning', hi: 'असावधानी, चेतावनी', cat: 'greeting' },
+      { wc: '𑢡𑣓𑣞𑣂', ho: 'अनसि (anasi)', en: 'application, petition, letter of consent', hi: 'प्रार्थना पत्र, निवेदन पत्र, स्वीकृति पत्र', cat: 'greeting' },
+      { wc: '𑢡𑣔𑣒𑣁', ho: 'अदटा (adata)', en: 'evil eye, being cast with a bad look', hi: 'नजर लगना, बुरी नजर लगना', cat: 'greeting' },
+      { wc: '𑢡𑣏𑣌𑣁 𑢴𑣃𑣌𑣃', ho: 'अचका दुकु (achaka duku)', en: 'accident, mishap, incident', hi: 'दुर्घटना, घटना', cat: 'greeting' },
+      { wc: '𑢡𑣒𑣉𑣇𑣜𑣂', ho: 'अटौरि (atauri)', en: 'week', hi: 'सप्ताह', cat: 'nature' },
+      { wc: '𑢡𑢷𑣃𑣟𑣁𑣄 𑢴𑣂𑣞𑣃𑣖', ho: 'अबुवाः दिसुम (abuwa: disum)', en: 'motherland, homeland, our country', hi: 'स्वदेश, हमारा देश', cat: 'nature' },
+      { wc: '𑢡𑣊𑢬𑣁', ho: 'अंका (anka)', en: 'letter, symbol, mark, signature', hi: 'अक्षर, चिह्न, प्रतीक, हस्ताक्षर', cat: 'greeting' },
+      { wc: '𑢡𑣜𑣔𑣁𑣞', ho: 'अरदास (ardas)', en: 'supplication, prayer, appeal', hi: 'विनती, प्रार्थना, गुहार', cat: 'greeting' },
+      { wc: '𑢡𑣘𑣓 𑢵𑣈𑢫𑣈', ho: 'अपन तेगे (apan tege)', en: 'oneself, by oneself, automatically', hi: 'स्वयं, स्वतः, अपने आप', cat: 'verb' },
+      { wc: '𑢡𑣜𑣞𑣂', ho: 'अरसि (arasi)', en: 'mirror, looking glass', hi: 'दर्पण, शीशा, आईना', cat: 'food' },
+      { wc: '𑢡𑣁𑣚𑣃𑣒𑣂', ho: 'आलुटि (aluti)', en: 'lip', hi: 'होंठ', cat: 'family' },
+      { wc: '𑢡𑣁 𑢶𑣉𑣏𑣁', ho: 'आ मोचा (ā mocha)', en: 'mouth, face', hi: 'मुँह, चेहरा', cat: 'family' },
+      { wc: '𑢩𑣜𑣕𑣉𑣓', ho: 'ओर्तों / ओरतो (orton / orto)', en: 'meaning, purport, sense', hi: 'भावार्थ, अर्थ', cat: 'greeting' },
+      { wc: '𑢩𑣕𑣉𑣚', ho: 'ओतोल (otol)', en: 'author, writer; canal', hi: 'लेखक, लेखिका, नहर', cat: 'greeting' },
+      { wc: '𑢩𑣎𑣜𑣁', ho: 'ओजरा (ojra)', en: 'dirty, soiled, unclean', hi: 'मैला, गंदा', cat: 'nature' },
+      { wc: '𑢩𑣌𑣉𑣗', ho: 'ओकोब (okob)', en: 'white, plain', hi: 'सफेद, श्वेत, सादा', cat: 'nature' },
+      { wc: '𑢩𑣖𑣉𑣓', ho: 'ओमोन (omon)', en: 'to sprout, germinate, grow', hi: 'अंकुर निकलना, उगना', cat: 'nature' },
+      { wc: '𑢩𑣌𑣉𑣓', ho: 'ओकोन (okon)', en: 'where?', hi: 'कहाँ', cat: 'greeting' },
+      { wc: '𑢩𑣌𑣉𑣅', ho: 'ओकोय (okoy)', en: 'who? to whom?', hi: 'कौन, किसे', cat: 'greeting' },
+      { wc: '𑢢𑣖𑣕𑣁', ho: 'इमता (imta)', en: 'at that time, then', hi: 'उस समय, तब', cat: 'greeting' },
+      { wc: '𑢢𑣘𑣓', ho: 'इपन (ipan)', en: 'separate, distinct (ipan borong = vowel)', hi: 'अलग (इपन ब्रोङ = स्वर वर्ण)', cat: 'greeting' },
+      { wc: '𑢣𑣛𑣂', ho: 'उड़ि (uri)', en: 'time, period, age', hi: 'समय, वक्त, काल', cat: 'nature' },
+      { wc: '𑢣𑣚𑢹𑣁𑣜𑣂', ho: 'उलहारि (ulhari)', en: 'to be born, creation, origin', hi: 'पैदा होना, सृष्टि होना, सृजन होना', cat: 'nature' },
+      { wc: '𑢣𑣘𑣓', ho: 'उपन (upan)', en: 'identity, introduction, existence', hi: 'पहचान, परिचय, अस्तित्व', cat: 'greeting' },
+      { wc: '𑢣𑣓𑣃𑣜𑣃𑣖', ho: 'उनुरूम (unurum)', en: 'to appear, to show, knowledge', hi: 'दिखना, दिखाना', cat: 'verb' },
+      { wc: '𑢣𑣚𑢫𑣃𑣚𑣁𑣓', ho: 'उलगुलान (ulgulan)', en: 'movement, revolution, uprising', hi: 'आन्दोलन, क्रांति', cat: 'greeting' },
+      { wc: '𑢨𑣒𑣁 𑢴𑣂𑣞𑣃𑣖', ho: 'एटा दिसुम (eta disum)', en: 'foreign land, another country', hi: 'परदेश, पराया देश', cat: 'nature' },
+      { wc: '𑢨𑣓𑣈𑣖', ho: 'एनेम (enem)', en: 'natural', hi: 'प्राकृतिक', cat: 'nature' },
+      { wc: '𑢬𑣌𑣚𑣁', ho: 'ककला (kakla)', en: 'to make noise, uproar, sound', hi: 'हल्ला करना, ध्वनि, आवाज, शोर', cat: 'verb' },
+      { wc: '𑢬𑣘𑣜𑣁', ho: 'कपरा (kapra)', country: '', en: 'country roof tile', hi: 'खपरा, छत ढंकने वाला', cat: 'food' },
+      { wc: '𑢬𑣖𑣛𑣁', ho: 'कमड़ा (kamra)', en: 'blanket', hi: 'कम्बल', cat: 'greeting' },
+      { wc: '𑢬𑣜𑣎𑣁', ho: 'करजा (karja)', en: 'liver, heart', hi: 'कलेजा, यकृत, जिगर', cat: 'family' },
+      { wc: '𑢬𑣔𑣜𑣟', ho: 'कदरव (kadaraw)', en: 'anger, rage, wrath', hi: 'क्रोध, गुस्सा, तैश', cat: 'greeting' },
+      { wc: '𑢬𑣘𑣁𑣂', ho: 'कपइ (kapai)', en: 'fan', hi: 'पंखा', cat: 'food' },
+      { wc: '𑢬𑣕𑣂𑣜𑣁𑣎', ho: 'कतिराज (katiraj)', en: 'traditional healer, doctor', hi: 'वैद्य, डॉक्टर, इलाज करने वाला', cat: 'greeting' },
+      { wc: '𑢬𑣎𑣂 𑢷𑣃𑣜𑣃', ho: 'कजि बुरु (kaji buru)', en: 'dictionary (collection of words)', hi: 'शब्दकोश', cat: 'greeting' },
+      { wc: '𑢬𑣎𑣂 𑢾𑣂𑣔', ho: 'कजि सिड (kaji sid)', en: 'resolve, vow, keep one\'s word', hi: 'संकल्प, प्रतिज्ञा करना, वचन निभाना', cat: 'greeting' },
+      { wc: '𑢬𑣎𑣂 𑢾𑣉𑣖𑣎𑣟', ho: 'कजि सोमजव (kaji somjaw)', en: 'to explain, convince', hi: 'समझाना', cat: 'verb' },
+      { wc: '𑢬𑣎𑣉𑣛𑣁', ho: 'कजोड़ा (kjora)', en: 'kohl, lampblack, soot', hi: 'काजल, कालिख', cat: 'greeting' },
+      { wc: '𑢬𑣜𑣖', ho: 'करम (karam)', en: 'karam tree & autumn harvest festival', hi: 'करमा, करम पेड़, करम पर्व', cat: 'greeting' },
+      { wc: '𑢬𑣃𑣓𑣃𑣚𑣂', ho: 'कुनुलि (kunuli)', en: 'question, query', hi: 'प्रश्न, सवाल', cat: 'greeting' },
+      { wc: '𑢬𑣃𑣔𑣃𑣖', ho: 'कुदुम (kudum)', en: 'story, tale, riddle', hi: 'कहानी, कथा', cat: 'greeting' },
+      { wc: '𑢬𑣈𑣖𑣒𑣁', ho: 'केम्टा (kemta)', en: 'strength, courage, brave', hi: 'ताकत, साहस, हिम्मत, साहसी', cat: 'greeting' },
+      { wc: '𑢬𑣉𑢷𑣉𑣜', ho: 'कोबोर (kobor)', en: 'news, information', hi: 'समाचार, सूचना', cat: 'greeting' },
+      { wc: '𑢬𑣉𑣜𑣉𑣊𑣎𑣉', ho: 'कोरोंजो (koronjo)', en: 'karanj tree & fruit', hi: 'करंज, करंज फल', cat: 'nature' },
+      { wc: '𑢬𑣃𑣊𑢬𑣚', ho: 'कुंकल (kunkal)', en: 'potter', hi: 'कुम्हार', cat: 'food' },
+      { wc: '𑢫𑣖𑣏𑣁', ho: 'गमचा (gamcha)', en: 'towel, thin cotton cloth', hi: 'तौलिया, गमछा', cat: 'greeting' },
+      { wc: '𑢫𑣚𑣂𑣔', ho: 'गलिड (galid)', en: 'mistake, error, fault', hi: 'गलती, भूल', cat: 'greeting' },
+      { wc: '𑢫𑣓𑣂𑣑', ho: 'गणिड् (ganid)', en: 'mathematics', hi: 'गणित', cat: 'greeting' },
+      { wc: '𑢫𑣁𑢹𑣃𑣓', ho: 'गाहन (gahan)', en: 'grace, adornment, decoration', hi: 'शोभा, सजावट', cat: 'greeting' },
+      { wc: '𑢫𑣈𑣅𑣓', ho: 'गेयन (geyan)', en: 'knowledge, educated, learned', hi: 'ज्ञान, शिक्षित, पढ़ा-लिखा', cat: 'greeting' },
+      { wc: '𑢫𑣉𑣖𑣁', ho: 'गोमा (goma)', en: 'major Ho monsoon/harvest festival', hi: 'हो समाज का प्रमुख कृषि पर्व', cat: 'greeting' },
+      { wc: '𑢫𑣉𑣜𑢫𑣉𑣓𑣑𑣂', ho: 'गोरगोण्डि (gorgondi)', en: 'rainbow, calendar', hi: 'इन्द्रधनुष, कैलेन्डर, पंचांग', cat: 'nature' },
+      { wc: '𑢯𑣘𑣁', ho: 'चपा (chapa)', en: 'print, impression, motif', hi: 'छाप, अंकित, छपाई', cat: 'greeting' },
+      { wc: '𑢯𑣌𑣛', ho: 'चकड (chakad)', en: 'lie, falsehood, to deceive', hi: 'झूठ, झूठ बोलना, ठगना', cat: 'greeting' },
+      { wc: '𑢯𑣂𑣜𑢫𑣚', ho: 'चिरगल (chirgal)', en: 'clear, knowledgeable, alert', hi: 'स्पष्ट, जानकार, सावधान', cat: 'greeting' },
+      { wc: '𑢯𑣂𑣕𑣂', ho: 'चिति (chiti)', en: 'letter, script (ho chiti)', hi: 'अक्षर, लिपि (जैसे हो चिति)', cat: 'greeting' },
+      { wc: '𑢯𑣂𑣒𑣂', ho: 'चिटि (chiti)', en: 'letter, mail, note', hi: 'पत्र, खत, चिट्ठी', cat: 'greeting' },
+      { wc: '𑢯𑣉𑣊 𑢾𑣃𑣞𑣃𑣓', ho: 'चों सुसुन (chon susun)', en: 'Chhau traditional dance', hi: 'छऊ नृत्य', cat: 'greeting' },
+      { wc: '𑢮𑣔𑣃𑣜', ho: 'जदुर (jadur)', en: 'traditional Ho folk song & dance tune', hi: 'पारंपरिक हो लोकगीत एवं नृत्य का राग', cat: 'greeting' },
+      { wc: '𑢮𑣚𑣃𑣟𑣁', ho: 'जलुवा (jaluwa)', en: 'liar, deceitful person', hi: 'झूठ, झूठ बोलने वाला', cat: 'greeting' },
+      { wc: '𑢮𑣕𑣈', ho: 'जते (jate)', en: 'purification, inauguration', hi: 'शुद्धिकरण, उद्घाटन, गृह पूजन', cat: 'greeting' },
+      { wc: '𑢮𑣜𑣂𑣖', ho: 'जरिम (jarim)', en: 'waterfall, stream', hi: 'झरना', cat: 'nature' },
+      { wc: '𑢮𑣙𑣃𑣜', ho: 'जहरु (jahru)', en: 'rest, relaxation', hi: 'विश्राम, आराम करना, सुस्ताना', cat: 'verb' },
+      { wc: '𑢮𑣃𑣖𑣘𑣚𑣅', ho: 'जुम्पलय (jumpalay)', en: 'council, assembly, conference', hi: 'परिषद्, सभा', cat: 'greeting' },
+      { wc: '𑢮𑣉𑣛𑣁', ho: 'जोड़ा (jora)', en: 'pair, couple, two in number', hi: 'जोड़ा-जोड़ी, दो संख्या में', cat: 'greeting' },
+      { wc: '𑢮𑣉𑢫', ho: 'जोग (jog)', en: 'yoga, union', hi: 'योग, योगा', cat: 'greeting' },
+      { wc: '𑢮𑣉𑢷𑣜𑣁', ho: 'जोबरा (jobra)', en: 'rubbish, garbage, litter', hi: 'कूड़ा-कर्कट, कचरा', cat: 'nature' },
+      { wc: '𑢲𑣅𑣔', ho: 'टयड (tayad)', en: 'place, spot, locality', hi: 'जगह, स्थानीय मान, स्थान', cat: 'nature' },
+      { wc: '𑢲𑣓𑣌𑣃', ho: 'टंकु (tanku)', en: 'mango seed / stone', hi: 'गुठली (आम की गुठली)', cat: 'food' },
+      { wc: '𑢲𑣌𑣃𑣂', ho: 'टकुइ (takui)', en: 'hand pump', hi: 'चापाकल, चापानल', cat: 'food' },
+      { wc: '𑢲𑣂𑣌𑣚𑣂', ho: 'टिकलि (tikli)', en: 'forehead dot / bindi', hi: 'टीका, बिन्दी', cat: 'greeting' },
+      { wc: '𑢲𑣃𑢡𑣜', ho: 'टुअर (tuar)', en: 'orphan', hi: 'अनाथ, माता-पिता हीन', cat: 'family' },
+      { wc: '𑢲𑣃𑣘𑣜𑣂', ho: 'टुपरि (tupri)', en: 'cap, hat, headgear', hi: 'टोपी, टोप, टोपा', cat: 'greeting' },
+      { wc: '𑢲𑣉𑣅𑣊𑣚', ho: 'टोंयोंल (tonyonl)', en: 'flag, banner', hi: 'झण्डा', cat: 'greeting' },
+      { wc: '𑢱𑣌𑣜𑣁', ho: 'डकरा (dakara)', en: 'to announce, campaign, proclaim', hi: 'प्रचार करना, प्रचार-प्रसार करना', cat: 'verb' },
+      { wc: '𑢱𑣃𑣚𑣌𑣂', ho: 'डुलकि (dulki)', en: 'dholak drum', hi: 'ढोलक', cat: 'greeting' },
+      { wc: '𑢱𑣈𑣊𑢬𑣂', ho: 'डेंकि (denki)', en: 'pedal rice-husking lever', hi: 'ढेंकी (धान कूटने का पारंपरिक यंत्र)', cat: 'food' },
+      { wc: '𑢱𑣉𑣓𑣑𑣉', ho: 'डोन्डो (dondo)', en: 'illiterate, unlettered', hi: 'अनपढ़, अशिक्षित, निराक्षर', cat: 'greeting' },
+      { wc: '𑢱𑣉𑢫𑣉𑣜', ho: 'डोगोर (dogor)', postal: '', en: 'postal address, whereabouts', hi: 'पत्राचार पता, पता', cat: 'greeting' },
+      { wc: '𑢵𑣋𑣉𑣅', ho: 'तगोय (tagoy)', en: 'to chew', hi: 'चबाना', cat: 'verb' },
+      { wc: '𑢵𑣓𑣑𑣂', ho: 'तंडि (tandi)', en: 'traditional fair, gathering', hi: 'तंडि पोरोब, जतरा, मेला', cat: 'greeting' },
+      { wc: '𑢵𑣇𑢬𑣃𑣚𑣁', ho: 'तउकुला (taukula)', en: 'wolf', hi: 'भेड़िया', cat: 'nature' },
+      { wc: '𑢵𑣘𑣁𑣄', ho: 'तपाः (tapa:)', en: 'to wash clothes', hi: 'कपड़ा धोना', cat: 'verb' },
+      { wc: '𑢵𑣁𑣞𑣉', ho: 'तासो (taso)', en: 'agriculture, farming work', hi: 'कृषि कार्य', cat: 'food' },
+      { wc: '𑢵𑣂𑣞𑣂𑣜', ho: 'तिसिर (tisir)', en: 'joy, happiness, delight', hi: 'खुशी, प्रसन्न, रांसा', cat: 'greeting' },
+      { wc: '𑢵𑣃𑣛𑣞𑣁', ho: 'तुड़सा (tursa)', en: 'tulsi / holy basil plant', hi: 'तुलसी, तुलसी का पौधा', cat: 'nature' },
+      { wc: '𑢵𑣈𑣕𑣁', ho: 'तेता (teta)', en: 'clean, pure, clear', hi: 'साफ, स्वच्छ, निर्मल', cat: 'nature' },
+      { wc: '𑢵𑣈𑣜𑣞𑣁', ho: 'तेरसा (tersa)', en: 'development, progress', hi: 'विकास', cat: 'greeting' },
+      { wc: '𑢴𑣛𑣂𑣅𑣄', ho: 'दड़ियः (dariya:)', en: 'beard', hi: 'दाढ़ी', cat: 'family' },
+      { wc: '𑢴𑣕𑣜𑣉𑣖', ho: 'दतरोम (datrom)', en: 'sickle', hi: 'हँसुआ', cat: 'food' },
+      { wc: '𑢴𑣂𑣚𑣂', ho: 'दिलि (dili)', en: 'invitation', hi: 'निमंत्रण, आमंत्रण', cat: 'greeting' },
+      { wc: '𑢴𑣂𑣚𑣀', ho: 'दिलं (dilan)', en: 'day, anniversary, date', hi: 'दिन, जयन्ती, तारीख, तिथि', cat: 'greeting' },
+      { wc: '𑢴𑣃𑣘𑣃𑣗 𑢴𑣉𑣜𑣉𑣖', ho: 'दुपुब दोरोम (dupub dorom)', en: 'primal/ancestral indigenous faith', hi: 'आदि धर्म', cat: 'greeting' },
+      { wc: '𑢴𑣃𑣑𑣑𑣃', ho: 'दुड्डु (duddu)', en: 'poet', hi: 'कवि', cat: 'greeting' },
+      { wc: '𑢴𑣃𑣜𑣓𑢫', ho: 'दुरंग (durang)', en: 'song, music', hi: 'गीत, गाना, संगीत', cat: 'greeting' },
+      { wc: '𑢴𑣃𑣕', ho: 'दुत (dut)', en: 'messenger, envoy', hi: 'समाचार वाहक, खबर पहुँचाने वाला', cat: 'greeting' },
+      { wc: '𑢴𑣉𑣜𑢷𑣜', ho: 'दोरबर (dorbar)', en: 'council, village court', hi: 'दरबार, पंचायत करना', cat: 'greeting' },
+      { wc: '𑢴𑣉𑣜𑣈𑣅𑣁', ho: 'दोरेया (doreya)', en: 'sea, ocean', hi: 'समुद्र, समन्दर', cat: 'nature' },
+      { wc: '𑢳𑣁𑣂', ho: 'नइ (nai)', en: 'creeper, vine', hi: 'लत्तर, लता', cat: 'nature' },
+      { wc: '𑢳𑣁𑣖𑣁', ho: 'नमा (nama)', en: 'new, fresh', hi: 'नया, नूतन, नवीन', cat: 'greeting' },
+      { wc: '𑢳𑣓𑣁', ho: 'नना (nana)', en: 'thin, slender, lean', hi: 'पतला, दुबला-पतला', cat: 'family' },
+      { wc: '𑢳𑣘𑣖', ho: 'नपम (napam)', en: 'meeting, encounter', hi: 'मुलाकात, भेंट', cat: 'greeting' },
+      { wc: '𑢳𑣁𑣘𑣁𑣅', ho: 'नपाय (napay)', en: 'health, well-being, staying healthy', hi: 'आरोग्य, हमेशा स्वस्थ रहना', cat: 'greeting' },
+      { wc: '𑢳𑣜𑣕𑣁', ho: 'नरता (narta)', en: 'sixth-day birth purification rite', hi: 'छठी (जन्म संस्कार)', cat: 'family' },
+      { wc: '𑢳𑣚𑣁 𑢴𑣂𑣞𑣃𑣖', ho: 'नला दिसुम (nala disum)', en: 'place of work/employment, city', hi: 'की जगह, शहर', cat: 'greeting' },
+      { wc: '𑢳𑣚𑣁𑣕𑣓𑣂', ho: 'नलातनि (nalatani)', en: 'worker, labourer', hi: 'मजदूरी करने वाला, श्रमिक', cat: 'greeting' }
     ];
 
     // ==================== FULL DICTIONARY QUIZ GENERATOR (GENTLE BLOCK SHUFFLE) ====================
@@ -1660,6 +1957,20 @@
     }
 
     // ==================== TAB 1: ALPHABET RENDER ====================
+    function setAlphaView(v) {
+      ['both', 'cards', 'table'].forEach(k => {
+        const b = document.getElementById(`alpha-v-${k}`);
+        if (!b) return;
+        b.className = k === v
+          ? 'px-2.5 py-1.5 bg-amber-500 text-slate-950 font-bold'
+          : 'px-2.5 py-1.5 bg-white text-slate-700 font-bold hover:bg-stone-100';
+      });
+      const gridEl = document.getElementById('alphabet-grid');
+      const tableWrap = document.getElementById('alphabet-table-wrap');
+      if (gridEl) gridEl.classList.toggle('hidden', v === 'table');
+      if (tableWrap) tableWrap.classList.toggle('hidden', v === 'cards');
+    }
+
     function filterAlpha(f) {
       ['all', 'vowel', 'consonant'].forEach(k => {
         const b = document.getElementById(`alpha-f-${k}`);
@@ -1674,14 +1985,29 @@
             <span>#${a.id}</span>
             <span class="px-1.5 py-0.5 rounded font-sans font-bold ${a.type === 'vowel' ? 'bg-amber-100 text-amber-800' : 'bg-emerald-100 text-emerald-800'}">${a.type === 'vowel' ? 'स्वर' : 'व्यंजन'}</span>
           </div>
-          <div class="wc-font text-2xl sm:text-3xl font-bold text-[#14532d] py-1">
+          <div class="wc-font text-2xl sm:text-3xl font-bold text-[#14532d] py-1" title="मरङ ओल् / हुड़िङ ओल्">
             <span>${a.cap}</span> <span class="text-amber-700">${a.small}</span>
           </div>
-          <div class="text-xs sm:text-sm font-extrabold text-slate-800">${a.deva}</div>
-          <div class="text-[11px] font-mono font-bold text-emerald-800">${a.eng}</div>
+          <div class="text-[11px] font-bold text-amber-800" title="पुस्तक में दिया गया उच्चारण (हिन्दी)">${a.bookPron}</div>
+          <div class="text-xs sm:text-sm font-extrabold text-slate-800" title="मानक देवनागरी ध्वनि">${a.deva}</div>
+          <div class="text-[11px] font-mono font-bold text-emerald-800" title="अंग्रेज़ी (Roman)">${a.eng}</div>
           <div class="text-[10px] text-amber-800 font-bold">🔊 सुनें</div>
         </div>
       `).join('');
+
+      const tbody = document.getElementById('alphabet-tbody');
+      if (tbody) {
+        tbody.innerHTML = list.map(a => `
+          <tr onclick="selectChar(${a.id}); speakHo('${a.deva}', this)" class="touch-card hover:bg-amber-50/60">
+            <td class="py-2 px-2.5 text-center font-mono text-xs text-slate-500">${a.id}</td>
+            <td class="py-2 px-2.5 text-center wc-font text-2xl font-bold text-[#14532d]">${a.cap}</td>
+            <td class="py-2 px-2.5 text-center wc-font text-2xl font-bold text-amber-700">${a.small}</td>
+            <td class="py-2 px-3 font-semibold text-amber-900">${a.bookPron}</td>
+            <td class="py-2 px-3 font-extrabold text-slate-800">${a.deva}</td>
+            <td class="py-2 px-3 font-mono font-bold text-emerald-800">${a.eng}</td>
+          </tr>
+        `).join('');
+      }
     }
 
     function selectChar(id) {
@@ -1689,11 +2015,37 @@
       document.getElementById('insp-unicode').textContent = a.unicode;
       document.getElementById('insp-cap').textContent = a.cap;
       document.getElementById('insp-small').textContent = a.small;
+      const bp = document.getElementById('insp-book-pron');
+      if (bp) bp.textContent = a.bookPron;
       document.getElementById('insp-deva').textContent = a.deva;
       document.getElementById('insp-eng').textContent = a.eng;
       document.getElementById('insp-rule').textContent = a.rule;
       document.getElementById('insp-ex-wc').textContent = a.exWc;
       document.getElementById('insp-ex-text').textContent = a.exText;
+
+      const chipsEl = document.getElementById('insp-ex-chips');
+      if (chipsEl) {
+        const wcParts = (a.exWc || '').split('•').map(s => s.trim()).filter(Boolean);
+        const txtParts = (a.exText || '').split('•').map(s => s.trim()).filter(Boolean);
+        chipsEl.innerHTML = wcParts.map((wcItem, idx) => {
+          const label = txtParts[idx] || '';
+          const safeSpeak = label.replace(/'/g, "\\'");
+          const safeWc = wcItem.replace(/'/g, "\\'");
+          return `
+            <div onclick="speakHo('${safeSpeak}', this)" class="touch-card flex items-center justify-between gap-2 px-3 py-2 rounded-lg bg-white hover:bg-amber-50 border border-stone-200 hover:border-amber-400">
+              <div class="flex items-center gap-2.5 min-w-0">
+                <span class="text-[10px] font-mono font-bold text-slate-400">${idx + 1}.</span>
+                <span class="wc-font text-lg font-bold text-[#14532d] shrink-0">${wcItem}</span>
+                <span class="text-xs font-semibold text-slate-700 truncate">${label}</span>
+              </div>
+              <div class="flex items-center gap-1 shrink-0">
+                <span class="text-xs text-amber-700 font-bold">🔊</span>
+                <button type="button" onclick="event.stopPropagation(); copyText('${safeWc}', '${safeSpeak} कॉपी किया गया')" class="px-1.5 py-0.5 rounded bg-stone-100 hover:bg-[#14532d] hover:text-white text-[10px] font-bold transition">📋</button>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
     }
 
     function renderAlphaDigits() {
@@ -1707,6 +2059,317 @@
     }
 
     // ==================== TAB 2: BARAHKHADI RENDER ====================
+    const BARAHKHADI_EXAMPLES = {
+      'ङ': [
+        [{ wc: '𑢶𑣀𑢫𑣚', txt: 'मंगल (शुभ)' }, { wc: '𑢡𑣀𑣊', txt: 'अङ (भोर)' }],
+        [{ wc: '𑢠𑣁', txt: 'ङा (ङा ध्वनि)' }],
+        [{ wc: '𑢾𑣂𑣊𑢫𑣂', txt: 'सिङगि (सूर्य)' }],
+        [{ wc: '𑢷𑣂𑣊', txt: 'बिङ (साँप)' }],
+        [{ wc: '𑢹𑣃𑣛𑣂𑣊', txt: 'हुड़िङ (छोटा)' }],
+        [{ wc: '𑢮𑣂𑣚𑣂𑣊', txt: 'जिलिङ (लम्बा)' }],
+        [{ wc: '𑢨𑣊𑢫𑣁', txt: 'एंगा (माँ)' }],
+        [{ wc: '𑢾𑣂𑣊𑣁𑣂', txt: 'सिङऐ (सूर्य किरण)' }],
+        [{ wc: '𑢷𑣉𑣊𑢫𑣁', txt: 'बोंगा (देवता)' }],
+        [{ wc: '𑢶𑣉𑣊𑣁𑣃', txt: 'मोंऔ (महुआ कली)' }],
+        [{ wc: '𑢼𑣀𑢫', txt: 'रंग (वर्ण)' }],
+        [{ wc: '𑢴𑣁𑣄', txt: 'दाः (पानी)' }]
+      ],
+      'ग': [
+        [{ wc: '𑢫𑣖𑣁', txt: 'गमा (वर्षा)' }, { wc: '𑢫𑣕𑣂', txt: 'गति (साथी)' }],
+        [{ wc: '𑢫𑣁𑣛𑣁', txt: 'गाड़ा (नदी)' }, { wc: '𑢨𑣊𑢫𑣁', txt: 'एंगा (माँ)' }],
+        [{ wc: '𑢫𑣂𑣕𑣂𑣚', txt: 'गितिल (बालू)' }, { wc: '𑢾𑣂𑣊𑢫𑣂', txt: 'सिङगि (सूर्य)' }],
+        [{ wc: '𑢷𑣃𑣋𑣆', txt: 'बुगी (अच्छा)' }],
+        [{ wc: '𑢫𑣃𑣓𑣑𑣂', txt: 'गुन्दि (गाय)' }, { wc: '𑢫𑣃𑣜𑣃', txt: 'गुरु (शिक्षक)' }],
+        [{ wc: '𑢫𑣇𑣖', txt: 'गूम (पछोड़ना)' }],
+        [{ wc: '𑢫𑣈𑣚', txt: 'गेल (दस)' }, { wc: '𑢶𑣋𑣈', txt: 'मगे (मागे पर्व)' }],
+        [{ wc: '𑢫𑣁𑣂', txt: 'गै (गाय)' }],
+        [{ wc: '𑢫𑣉𑣛𑣁', txt: 'गोड़ा (खेत)' }, { wc: '𑢫𑣉𑣖', txt: 'गोम (गेहूँ)' }],
+        [{ wc: '𑢫𑣁𑣃', txt: 'गौ (गौ)' }],
+        [{ wc: '𑢫𑣊𑣋𑣁𑣂', txt: 'गंगए (मकई)' }, { wc: '𑢫𑣓𑣑𑣁', txt: 'गण्डा (अंगुली)' }],
+        [{ wc: '𑢫𑣁𑣄', txt: 'गः (सीना)' }]
+      ],
+      'क': [
+        [{ wc: '𑢬𑣔𑣚', txt: 'कदल (केला)' }, { wc: '𑢬𑣒𑣁', txt: 'कटा (पैर)' }],
+        [{ wc: '𑢬𑣁𑣖', txt: 'काम (काम)' }, { wc: '𑢬𑣁𑣄', txt: 'काः (कौआ)' }],
+        [{ wc: '𑢬𑣂𑣚𑣂', txt: 'किलि (गोत्र)' }, { wc: '𑢬𑣂𑣖𑣂𑣓', txt: 'किमिन (बहू)' }],
+        [{ wc: '𑢡𑣜𑣌𑣆', txt: 'अरकी (शराब)' }],
+        [{ wc: '𑢬𑣃𑣚𑣁', txt: 'कुला (बाघ)' }, { wc: '𑢬𑣃𑣛𑣂', txt: 'कुड़ि (लड़की)' }],
+        [{ wc: '𑢬𑣇𑣚𑣁', txt: 'कूला (शेर)' }],
+        [{ wc: '𑢬𑣈𑣛𑣁', txt: 'केड़ा (भैंसा)' }, { wc: '𑢬𑣈𑣅𑣁', txt: 'केया (बुलाना)' }],
+        [{ wc: '𑢬𑣁𑣂', txt: 'कै (क्यों)' }],
+        [{ wc: '𑢬𑣉𑣔𑣈', txt: 'कोदे (मडुवा)' }, { wc: '𑢬𑣉𑣟𑣁', txt: 'कोवा (लड़का)' }],
+        [{ wc: '𑢬𑣁𑣃𑣄', txt: 'कौः (कौआ)' }],
+        [{ wc: '𑢬𑣊𑣌𑣁', txt: 'कंका (कंकड़)' }],
+        [{ wc: '𑢬𑣁𑣄', txt: 'कः (कौआ)' }]
+      ],
+      'ञ': [
+        [{ wc: '𑢡𑣍', txt: 'अञ (मैं)' }, { wc: '𑢵𑣃𑣍', txt: 'तुञ (तीर मारना)' }],
+        [{ wc: '𑢮𑣍𑣁𑣓', txt: 'ज्ञान (ज्ञान)' }],
+        [{ wc: '𑢡𑣚𑣂𑣍', txt: 'अलिञ (हम दोनों)' }, { wc: '𑢡𑣌𑣂𑣍', txt: 'अकिञ (वे दोनों)' }],
+        [{ wc: '𑢷𑣂𑣍', txt: 'बिञ (साँप)' }],
+        [{ wc: '𑢯𑣃𑣍', txt: 'चुञ (चोंच)' }],
+        [{ wc: '𑢭𑣇', txt: 'ञू (ञू ध्वनि)' }],
+        [{ wc: '𑢭𑣈𑣚', txt: 'ञेल (देखना)' }],
+        [{ wc: '𑢭𑣁𑣂', txt: 'ञै (ञै ध्वनि)' }],
+        [{ wc: '𑢹𑣉𑣓𑣎𑣜', txt: 'होन्जर (ससुर)' }],
+        [{ wc: '𑢭𑣁𑣃', txt: 'ञौ (ञौ ध्वनि)' }],
+        [{ wc: '𑢭𑣊', txt: 'ञं (ञं ध्वनि)' }],
+        [{ wc: '𑢭𑣄', txt: 'ञः (ञः ध्वनि)' }]
+      ],
+      'ज': [
+        [{ wc: '𑢮𑣋𑣜', txt: 'जगर (बातचीत)' }, { wc: '𑢮𑣚', txt: 'जल (चाटना)' }],
+        [{ wc: '𑢮𑣁𑣘𑣁𑣄', txt: 'जपः (पास)' }, { wc: '𑢼𑣁𑣎𑣁', txt: 'राजा (राजा)' }],
+        [{ wc: '𑢮𑣂𑣚𑣃', txt: 'जिलु (मांस)' }, { wc: '𑢮𑣂𑣅𑣁', txt: 'जिया (दादी)' }],
+        [{ wc: '𑢮𑣆', txt: 'जी (आत्मा)' }, { wc: '𑢡𑣎𑣆', txt: 'अजी (दीदी)' }],
+        [{ wc: '𑢮𑣃𑣛𑣂', txt: 'जुड़ि (मित्र)' }, { wc: '𑢹𑣃𑣎𑣃𑣄', txt: 'हुजुः (आना)' }],
+        [{ wc: '𑢮𑣇𑣛𑣂', txt: 'जूड़ि (जोड़ी)' }],
+        [{ wc: '𑢮𑣈𑣒𑣈', txt: 'जेटे (गर्मी/धूप)' }],
+        [{ wc: '𑢮𑣁𑣂', txt: 'जै (पोता/नाती)' }],
+        [{ wc: '𑢮𑣉𑣙𑣁𑣜', txt: 'जोहार (प्रणाम)' }, { wc: '𑢮𑣉𑣎𑣉', txt: 'जोजो (इमली)' }],
+        [{ wc: '𑢮𑣁𑣃', txt: 'जौ (जौ)' }],
+        [{ wc: '𑢮𑣊', txt: 'जङ (हड्डी/बीज)' }, { wc: '𑢮𑣓𑣃𑣖', txt: 'जनुम (काँटा)' }],
+        [{ wc: '𑢮𑣁𑣄', txt: 'जः (जः ध्वनि)' }]
+      ],
+      'च': [
+        [{ wc: '𑢯𑣌𑣁', txt: 'चका (पहिया)' }, { wc: '𑢯𑣕𑣉𑣖', txt: 'चतोम (छाता)' }],
+        [{ wc: '𑢯𑣁𑣞', txt: 'चास (खेती)' }, { wc: '𑢯𑣁𑣗', txt: 'चाब (मुँह खोलना)' }],
+        [{ wc: '𑢯𑣂𑣔𑣃', txt: 'चिदु (कीड़ा)' }, { wc: '𑢯𑣂𑣘𑣁', txt: 'चिपा (निचोड़ना)' }],
+        [{ wc: '𑢶𑣏𑣆', txt: 'मची (किनारा)' }],
+        [{ wc: '𑢯𑣃𑣒𑣃', txt: 'चुटु (चूहा)' }, { wc: '𑢯𑣃𑣓𑣔𑣂', txt: 'चुन्दि (छछूदर)' }],
+        [{ wc: '𑢯𑣇𑣒𑣃', txt: 'चूटु (चूहा)' }],
+        [{ wc: '𑢯𑣈𑣍𑣛𑣈', txt: 'चेंड़े (चिड़िया)' }, { wc: '𑢯𑣈𑣕𑣓', txt: 'चेतन (ऊपर)' }],
+        [{ wc: '𑢯𑣁𑣂𑣓', txt: 'चैन (शांति)' }],
+        [{ wc: '𑢯𑣉𑣌𑣈', txt: 'चोके (मेंढक)' }, { wc: '𑢯𑣉𑣌𑣉𑣅𑣄', txt: 'चोकोएः (थोड़ा)' }],
+        [{ wc: '𑢯𑣁𑣃𑣚𑣂', txt: 'चौलि (चावल)' }],
+        [{ wc: '𑢯𑣓𑣔𑣃𑣄', txt: 'चन्दुः (चाँद)' }],
+        [{ wc: '𑢯𑣈𑣓𑣄', txt: 'चेनः (क्या)' }]
+      ],
+      'ण': [
+        [{ wc: '𑢬𑣂𑣞𑣐', txt: 'किसण (धनवान)' }],
+        [{ wc: '𑢬𑣐𑣁', txt: 'कणा (माप)' }, { wc: '𑢶𑣐𑣁', txt: 'मणा (मना)' }],
+        [{ wc: '𑢸𑣉𑣐𑣂', txt: 'पोणि (पोणि)' }],
+        [{ wc: '𑢟𑣁𑣐𑣆', txt: 'वाणी (वाणी)' }],
+        [{ wc: '𑢮𑣉𑣐𑣃', txt: 'जोणु (झाड़ू)' }],
+        [{ wc: '𑢰𑣇', txt: 'णू (णू ध्वनि)' }],
+        [{ wc: '𑢸𑣉𑣐𑣈', txt: 'पोणे (पोणे)' }],
+        [{ wc: '𑢰𑣁𑣂', txt: 'णै (णै ध्वनि)' }],
+        [{ wc: '𑢮𑣉𑣐𑣉𑣄', txt: 'जोनोः (झाड़ू)' }, { wc: '𑢸𑣉𑣐𑣉𑣞𑣉', txt: 'पोणोसो (कटहल)' }],
+        [{ wc: '𑢰𑣁𑣃', txt: 'णौ (णौ ध्वनि)' }],
+        [{ wc: '𑢰𑣊', txt: 'णं (णं ध्वनि)' }],
+        [{ wc: '𑢮𑣉𑣐𑣉𑣄', txt: 'जोनोः (झाड़ू)' }]
+      ],
+      'ड': [
+        [{ wc: '𑢱𑣓𑣑𑣁𑣄', txt: 'डण्डः (लाठी)' }, { wc: '𑢱𑣓𑣑𑣈', txt: 'डन्डे (जुर्माना)' }],
+        [{ wc: '𑢱𑣁𑣌𑣃𑣟𑣁', txt: 'डाकुवा (प्रचारक)' }, { wc: '𑢴𑣂𑣓𑣑𑣁', txt: 'डिन्डा (कुँवारा)' }],
+        [{ wc: '𑢱𑣂𑣓𑣑𑣁', txt: 'डिन्डा (कुँवारा)' }, { wc: '𑢶𑣂𑣓𑣑𑣂', txt: 'मिण्डि (भेड़)' }],
+        [{ wc: '𑢶𑣂𑣓𑣑𑣆', txt: 'मिण्डी (भेड़)' }],
+        [{ wc: '𑢱𑣃𑣌𑣂', txt: 'डुकि (पेशाब)' }, { wc: '𑢣𑣓𑣑𑣃', txt: 'उण्डु (बिल)' }],
+        [{ wc: '𑢱𑣇𑣌𑣂', txt: 'डूकि (पेशाब)' }],
+        [{ wc: '𑢱𑣈𑣜𑣁', txt: 'डेरा (निवास)' }],
+        [{ wc: '𑢱𑣁𑣂', txt: 'डै (डै ध्वनि)' }],
+        [{ wc: '𑢱𑣉𑣊𑣋𑣁', txt: 'डोंगा (नाव)' }, { wc: '𑢩𑣊𑣑𑣉𑣄', txt: 'ओंडोः (और)' }],
+        [{ wc: '𑢱𑣁𑣃', txt: 'डौ (डौ ध्वनि)' }],
+        [{ wc: '𑢱𑣊𑣑𑣁', txt: 'डंडा (डंडा)' }],
+        [{ wc: '𑢱𑣓𑣑𑣁𑣄', txt: 'डण्डः (लाठी)' }]
+      ],
+      'ट': [
+        [{ wc: '𑢲𑣌𑣁', txt: 'टका (रुपया)' }, { wc: '𑢲𑣒𑣂', txt: 'टटि (बाड़)' }],
+        [{ wc: '𑢲𑣁𑣌𑣁', txt: 'टाका (रुपया)' }, { wc: '𑢴𑣒𑣁', txt: 'दटा (दाँत)' }],
+        [{ wc: '𑢲𑣂𑣅𑣃𑣚𑣂', txt: 'टियुलि (पक्षी)' }, { wc: '𑢷𑣃𑣒𑣂', txt: 'बुटि (नाभि)' }],
+        [{ wc: '𑢲𑣒𑣆', txt: 'टटी (बाड़)' }],
+        [{ wc: '𑢲𑣃𑣘𑣂', txt: 'टुपि (टोपी)' }, { wc: '𑢯𑣃𑣒𑣃', txt: 'चुटु (चूहा)' }],
+        [{ wc: '𑢲𑣇𑣘𑣂', txt: 'टूपि (टोपी)' }],
+        [{ wc: '𑢲𑣈𑣜', txt: 'टेर (फेंकना)' }],
+        [{ wc: '𑢲𑣁𑣂', txt: 'टै (टै ध्वनि)' }],
+        [{ wc: '𑢲𑣉𑣒𑣁', txt: 'टोटा (गोली)' }, { wc: '𑢸𑣉𑣒𑣁', txt: 'पोटा (आँत)' }],
+        [{ wc: '𑢲𑣁𑣃', txt: 'टौ (टौ ध्वनि)' }],
+        [{ wc: '𑢲𑣃𑣊𑣌𑣂', txt: 'टुंकि (टोकरी)' }],
+        [{ wc: '𑢲𑣉𑣘𑣄', txt: 'टोपः (बूँद)' }]
+      ],
+      'न': [
+        [{ wc: '𑢳𑣖', txt: 'नम (पाना)' }, { wc: '𑢳𑣚𑣁', txt: 'नला (मजदूरी)' }],
+        [{ wc: '𑢳𑣁𑣓𑣁', txt: 'नाना (नानी)' }, { wc: '𑢷𑣓𑣁', txt: 'बना (भालू)' }],
+        [{ wc: '𑢳𑣂𑣔𑣁', txt: 'निदा (रात)' }, { wc: '𑢳𑣂𑣜', txt: 'निर (दौड़ना)' }],
+        [{ wc: '𑢳𑣆𑣔𑣁', txt: 'नीदा (रात)' }],
+        [{ wc: '𑢳𑣃𑣕𑣃𑣖', txt: 'नुतुम (नाम)' }, { wc: '𑢳𑣃𑣓𑣃', txt: 'नुनु (दूध पिलाना)' }],
+        [{ wc: '𑢳𑣇', txt: 'नू (पीना)' }],
+        [{ wc: '𑢳𑣈', txt: 'ने (यह)' }, { wc: '𑢳𑣈𑣚', txt: 'नेल (देखना)' }],
+        [{ wc: '𑢳𑣁𑣂𑣚', txt: 'नैल (हल)' }],
+        [{ wc: '𑢳𑣉𑣋𑣉𑣔', txt: 'नोगोद् (मीठा)' }, { wc: '𑢳𑣉𑣚𑣔', txt: 'नोलद् (कालिख)' }],
+        [{ wc: '𑢳𑣁𑣃', txt: 'नौ (नौ)' }],
+        [{ wc: '𑢡𑣓𑣔𑣃', txt: 'अन्दु (पायल)' }],
+        [{ wc: '𑢳𑣂𑣄', txt: 'निः (खोलना)' }]
+      ],
+      'द': [
+        [{ wc: '𑢴𑣜𑣃', txt: 'दरु (पेड़)' }, { wc: '𑢴𑣞𑣂', txt: 'दसि (सेवक)' }],
+        [{ wc: '𑢴𑣁𑣄', txt: 'दाः (पानी)' }, { wc: '𑢴𑣔𑣁', txt: 'ददा (बड़ा भाई)' }],
+        [{ wc: '𑢴𑣂𑣜𑣂', txt: 'दिरि (पत्थर)' }, { wc: '𑢴𑣂𑣞𑣃𑣖', txt: 'दिसुम (देश)' }],
+        [{ wc: '𑢴𑣂𑣔𑣆', txt: 'दिदी (बड़ी बहन)' }],
+        [{ wc: '𑢴𑣃𑣚𑣛', txt: 'दुलड़ (प्रेम)' }, { wc: '𑢴𑣃𑣜𑣊', txt: 'दुरङ (गीत)' }],
+        [{ wc: '𑢴𑣇𑣚', txt: 'दूल (उड़ेलना)' }],
+        [{ wc: '𑢴𑣈𑣊𑣋𑣁', txt: 'देंगा (मदद)' }, { wc: '𑢴𑣈𑣟𑣁', txt: 'देंवा (वैद्य)' }],
+        [{ wc: '𑢴𑣂', txt: 'दइ (बड़ी दीदी)' }],
+        [{ wc: '𑢴𑣉𑣚𑣁', txt: 'दोला (चलो)' }, { wc: '𑢴𑣉𑣅𑣁', txt: 'दोया (पीठ)' }],
+        [{ wc: '𑢴𑣁𑣃', txt: 'दौ (दौड़)' }],
+        [{ wc: '𑢴𑣊', txt: 'दं (दं ध्वनि)' }],
+        [{ wc: '𑢴𑣈𑣄', txt: 'देः (चढ़ना)' }]
+      ],
+      'त': [
+        [{ wc: '𑢵𑣚𑣁', txt: 'तला (मध्य)' }, { wc: '𑢵𑣞𑣔', txt: 'तसद् (घास)' }],
+        [{ wc: '𑢵𑣕𑣁', txt: 'तता (दादाजी)' }, { wc: '𑢵𑣜𑣁', txt: 'तरा (आधा)' }],
+        [{ wc: '𑢵𑣂𑣞𑣂𑣊', txt: 'तिसिङ (आज)' }, { wc: '𑢵𑣂𑣌𑣂𑣓', txt: 'तिकिन (दोपहर)' }],
+        [{ wc: '𑢵𑣆', txt: 'ती (हाथ)' }, { wc: '𑢹𑣕𑣆', txt: 'हती (हाथी)' }],
+        [{ wc: '𑢵𑣃𑣜', txt: 'तुर (उगना)' }, { wc: '𑢵𑣃𑣅𑣃', txt: 'तुयु (सियार)' }],
+        [{ wc: '𑢵𑣇𑣜', txt: 'तूर (उगना)' }],
+        [{ wc: '𑢵𑣈𑣋𑣁', txt: 'तेगा (पैर रखना)' }, { wc: '𑢵𑣈𑣚𑣁', txt: 'तेला (हाथ में लेना)' }],
+        [{ wc: '𑢵𑣂𑣓', txt: 'तइन (रहना)' }],
+        [{ wc: '𑢵𑣉𑣟𑣁', txt: 'तोवा (दूध)' }, { wc: '𑢵𑣉𑣚', txt: 'तोल (बाँधना)' }],
+        [{ wc: '𑢵𑣁𑣃', txt: 'तौ (तौ ध्वनि)' }],
+        [{ wc: '𑢵𑣊𑣋𑣂', txt: 'तंगि (प्रतीक्षा)' }],
+        [{ wc: '𑢵𑣉𑣄', txt: 'तोः (निशाना)' }]
+      ],
+      'म': [
+        [{ wc: '𑢶𑣜𑣊', txt: 'मरङ (बड़ा)' }, { wc: '𑢶𑣓𑣑𑣂', txt: 'मण्डि (भात)' }],
+        [{ wc: '𑢶𑣁𑣓𑣌𑣂', txt: 'मान्कि (मानकी)' }, { wc: '𑢶𑣁𑣘𑣜𑣊', txt: 'मापरङ (विशाल)' }],
+        [{ wc: '𑢶𑣂𑣞𑣂', txt: 'मिसि (छोटी बहन)' }, { wc: '𑢶𑣂𑣜𑣃', txt: 'मिरु (तोता)' }],
+        [{ wc: '𑢶𑣆𑣓𑣑𑣂', txt: 'मीण्डि (भेड़)' }],
+        [{ wc: '𑢶𑣃𑣓𑣑𑣁', txt: 'मुण्डा (मुखिया)' }, { wc: '𑢶𑣃𑣚𑣂', txt: 'मुलि (सीधा)' }],
+        [{ wc: '𑢶𑣇𑣚𑣂', txt: 'मूलि (सीधा)' }],
+        [{ wc: '𑢶𑣈𑣔', txt: 'मेद् (आँख)' }, { wc: '𑢶𑣈𑣜𑣉𑣖', txt: 'मेरोम (बकरी)' }],
+        [{ wc: '𑢶𑣁𑣂', txt: 'मइ (बेटी)' }],
+        [{ wc: '𑢶𑣉𑣏𑣁', txt: 'मोचा (मुँह)' }, { wc: '𑢶𑣉𑣚𑣉𑣊', txt: 'मोलोङ (ललाट)' }],
+        [{ wc: '𑢶𑣁𑣃', txt: 'मौ (मौ ध्वनि)' }],
+        [{ wc: '𑢶𑣀𑢫𑣚', txt: 'मंगल (शुभ)' }],
+        [{ wc: '𑢶𑣁𑣄', txt: 'मः (काटना)' }]
+      ],
+      'ब': [
+        [{ wc: '𑢷𑣗𑣁', txt: 'बबा (धान)' }, { wc: '𑢷𑣓𑣁', txt: 'बना (भालू)' }],
+        [{ wc: '𑢷𑣁', txt: 'बा (फूल)' }, { wc: '𑢷𑣁𑣜', txt: 'बार (दो/बाहर)' }],
+        [{ wc: '𑢷𑣂𑣜', txt: 'बिर (जंगल)' }, { wc: '𑢷𑣂𑣊', txt: 'बिङ (साँप)' }],
+        [{ wc: '𑢷𑣆', txt: 'बी (पेट भरना)' }],
+        [{ wc: '𑢷𑣃𑣜𑣃', txt: 'बुरु (पहाड़)' }, { wc: '𑢷𑣃𑣋𑣂𑣓', txt: 'बुगिन (अच्छा)' }],
+        [{ wc: '𑢷𑣇𑣜𑣃', txt: 'बूरु (पर्वत)' }],
+        [{ wc: '𑢷𑣈𑣛𑣁', txt: 'बेड़ा (घाटी खेत)' }, { wc: '𑢷𑣈𑣜𑣈𑣚', txt: 'बेरेल (कच्चा)' }],
+        [{ wc: '𑢷𑣂', txt: 'बइ (बनाना)' }],
+        [{ wc: '𑢷𑣉𑣜𑣉', txt: 'बोरो (डरना)' }, { wc: '𑢷𑣉𑣚𑣉', txt: 'बोलो (प्रवेश)' }],
+        [{ wc: '𑢷𑣇', txt: 'बउ (बड़ा भाई)' }],
+        [{ wc: '𑢷𑣓𑣔𑣁', txt: 'बन्दा (तालाब)' }],
+        [{ wc: '𑢷𑣈𑣄', txt: 'बेः (थूकना)' }]
+      ],
+      'प': [
+        [{ wc: '𑢸𑣕𑣁', txt: 'पता (पत्ता)' }, { wc: '𑢸𑣛𑣟', txt: 'पड़व (पढ़ना)' }],
+        [{ wc: '𑢸𑣁𑣕𑣁', txt: 'पाता (पत्ता)' }, { wc: '𑢳𑣘𑣁', txt: 'नपा (लाभ)' }],
+        [{ wc: '𑢸𑣂𑣕𑣚', txt: 'पितल (पीतल)' }, { wc: '𑢡𑣘𑣂𑣜', txt: 'अपिर (उड़ना)' }],
+        [{ wc: '𑢸𑣆', txt: 'पी (मैदान)' }],
+        [{ wc: '𑢸𑣃𑣕𑣖', txt: 'पुतम (पण्डुक)' }, { wc: '𑢸𑣃𑣞𑣂', txt: 'पुसि (बिल्ली)' }],
+        [{ wc: '𑢸𑣇𑣄', txt: 'पूः (दोना)' }],
+        [{ wc: '𑢸𑣈𑣅𑣎𑣂', txt: 'पेयजि (प्याज)' }, { wc: '𑢡𑣘𑣈', txt: 'अपे (तुम सब)' }],
+        [{ wc: '𑢸𑣁𑣂', txt: 'पै (पै ध्वनि)' }],
+        [{ wc: '𑢸𑣉𑣜𑣉𑣗', txt: 'पोरोब (पर्व)' }, { wc: '𑢸𑣉𑣅𑣞𑣁', txt: 'पोयसा (पैसा)' }],
+        [{ wc: '𑢸𑣁𑣃', txt: 'पौ (पौ ध्वनि)' }],
+        [{ wc: '𑢸𑣖𑣘𑣚', txt: 'पम्पल (तितली)' }],
+        [{ wc: '𑢸𑣈𑣄', txt: 'पेः (शक्ति)' }]
+      ],
+      'ह': [
+        [{ wc: '𑢹𑣌𑣃', txt: 'हकु (मछली)' }, { wc: '𑢹𑣕𑣂', txt: 'हति (हाथी)' }],
+        [{ wc: '𑢹𑣁𑣕𑣃', txt: 'हातु (गाँव)' }, { wc: '𑢮𑣉𑣙𑣁𑣜', txt: 'जोहार (प्रणाम)' }],
+        [{ wc: '𑢹𑣂𑣏𑣂𑣜', txt: 'हिचिर (बिजली)' }, { wc: '𑢹𑣂𑣞𑣂', txt: 'हिसि (बीस)' }],
+        [{ wc: '𑢹𑣂𑣚𑣆', txt: 'हिली (भाभी)' }],
+        [{ wc: '𑢹𑣃𑣎𑣃𑣄', txt: 'हुजुः (आना)' }, { wc: '𑢹𑣃𑣛𑣂𑣊', txt: 'हुड़िङ (छोटा)' }],
+        [{ wc: '𑢹𑣇𑣎𑣃𑣄', txt: 'हूजुः (आना)' }],
+        [{ wc: '𑢹𑣈𑣜', txt: 'हेर (बोना)' }, { wc: '𑢹𑣈𑣜𑣈𑣚', txt: 'हेरेल (पति)' }],
+        [{ wc: '𑢹𑣁𑣂', txt: 'है (है ध्वनि)' }],
+        [{ wc: '𑢹𑣉𑣜𑣁', txt: 'होरा (रास्ता)' }, { wc: '𑢹𑣉𑣅𑣉', txt: 'होयो (हवा)' }],
+        [{ wc: '𑢹𑣁𑣃', txt: 'हौ (हौ ध्वनि)' }],
+        [{ wc: '𑢹𑣖𑣗𑣚', txt: 'हम्बल (भारी)' }],
+        [{ wc: '𑢹𑣈𑣞𑣁𑣄', txt: 'हेसः (पीपल)' }]
+      ],
+      'ल': [
+        [{ wc: '𑢺𑣋𑣁', txt: 'लगा (थकान)' }, { wc: '𑢺𑣕𑣜', txt: 'लतर (नीचे)' }],
+        [{ wc: '𑢺𑣁𑣓𑣔𑣁', txt: 'लन्दा (हँसना)' }, { wc: '𑢹𑣉𑣚𑣁', txt: 'होला (कल)' }],
+        [{ wc: '𑢺𑣂𑣎𑣁𑣄', txt: 'लिजः (कपड़ा)' }, { wc: '𑢺𑣂𑣖𑣗𑣃', txt: 'लिम्बु (नींबू)' }],
+        [{ wc: '𑢣𑣚𑣆', txt: 'उली (आम)' }],
+        [{ wc: '𑢺𑣃𑣕𑣃𑣜', txt: 'लुतुर (कान)' }, { wc: '𑢺𑣃𑣖', txt: 'लुम (भींगना)' }],
+        [{ wc: '𑢺𑣇', txt: 'लू (परोसना)' }],
+        [{ wc: '𑢺𑣈𑣚', txt: 'लेल (देखना)' }, { wc: '𑢺𑣈𑣌𑣁', txt: 'लेका (समान)' }],
+        [{ wc: '𑢺𑣁𑣂𑣄', txt: 'लाइः (पेट)' }],
+        [{ wc: '𑢺𑣉𑣚𑣉', txt: 'लोलो (गर्म)' }, { wc: '𑢺𑣉', txt: 'लो (जलना)' }],
+        [{ wc: '𑢺𑣁𑣃', txt: 'लौ (लौ)' }],
+        [{ wc: '𑢺𑣃𑣊𑣋𑣖', txt: 'लुंगम (कोया)' }],
+        [{ wc: '𑢺𑣈𑣄', txt: 'लेः (जीभ)' }]
+      ],
+      'ड़': [
+        [{ wc: '𑢹𑣛𑣖', txt: 'हड़म (बूढ़ा)' }, { wc: '𑢴𑣃𑣚𑣛', txt: 'दुलड़ (प्रेम)' }],
+        [{ wc: '𑢫𑣛𑣁', txt: 'गड़ा (नदी)' }, { wc: '𑢡𑣌𑣛𑣁', txt: 'अकड़ा (अखड़ा)' }],
+        [{ wc: '𑢮𑣃𑣛𑣂', txt: 'जुड़ि (साथी)' }, { wc: '𑢬𑣃𑣛𑣂', txt: 'कुड़ि (लड़की)' }],
+        [{ wc: '𑢷𑣔𑣃𑣛𑣆', txt: 'बदुड़ी (चमगादड़)' }],
+        [{ wc: '𑢶𑣃𑣊𑢫𑣃𑣛𑣃𑣙𑣁𑣜', txt: 'मुंगुड़ुहर (मंगलवार)' }],
+        [{ wc: '𑢻𑣇', txt: 'ड़ू (ड़ू ध्वनि)' }],
+        [{ wc: '𑢯𑣈𑣍𑣛𑣈', txt: 'चेंड़े (चिड़िया)' }, { wc: '𑢫𑣈𑣛𑣈', txt: 'गेड़े (बत्तख)' }],
+        [{ wc: '𑢺𑣛𑣁𑣂', txt: 'लड़ाइ (लड़ाई)' }],
+        [{ wc: '𑢹𑣉𑣛𑣉', txt: 'होड़ो (मनुष्य)' }],
+        [{ wc: '𑢻𑣁𑣃', txt: 'ड़ौ (ड़ौ ध्वनि)' }],
+        [{ wc: '𑢻𑣊', txt: 'ड़ं (ड़ं ध्वनि)' }],
+        [{ wc: '𑢡𑣛𑣄', txt: 'अड़ः (छोड़ना)' }]
+      ],
+      'र': [
+        [{ wc: '𑢼𑣓𑣃', txt: 'रनु (औषधि)' }, { wc: '𑢼𑣏𑣁', txt: 'रचा (आँगन)' }],
+        [{ wc: '𑢼𑣁𑣎𑣁', txt: 'राजा (राजा)' }, { wc: '𑢼𑣁𑣞𑣁', txt: 'रासा (खुशी)' }],
+        [{ wc: '𑢼𑣂𑣖𑣂𑣚', txt: 'रिमिल (बादल)' }, { wc: '𑢴𑣂𑣜𑣂', txt: 'दिरि (पत्थर)' }],
+        [{ wc: '𑢼𑣆', txt: 'री (कर्ज)' }],
+        [{ wc: '𑢼𑣃𑣕𑣃', txt: 'रुतु (बाँसुरी)' }, { wc: '𑢼𑣃𑣘𑣁', txt: 'रुपा (चाँदी)' }],
+        [{ wc: '𑢴𑣜𑣇', txt: 'दरू (वृक्ष)' }],
+        [{ wc: '𑢼𑣈𑣔', txt: 'रेद् (जड़)' }, { wc: '𑢼𑣈𑣅𑣁', txt: 'रेया (ठण्डा)' }],
+        [{ wc: '𑢼𑣁𑣂', txt: 'रै (रै ध्वनि)' }],
+        [{ wc: '𑢼𑣉', txt: 'रो (सुखाना)' }, { wc: '𑢼𑣉𑣟𑣁', txt: 'रोवा (आत्मा)' }],
+        [{ wc: '𑢼𑣁𑣃', txt: 'रौ (रौ ध्वनि)' }],
+        [{ wc: '𑢼𑣉𑣊', txt: 'रोङ (रंग)' }],
+        [{ wc: '𑢼𑣁𑣄', txt: 'रः (पुकारना)' }]
+      ],
+      'ष / श': [
+        [{ wc: '𑢽𑣗𑣔', txt: 'शब्द (शब्द)' }],
+        [{ wc: '𑢽𑣁𑣓𑣕𑣂', txt: 'शान्ति (शांति)' }],
+        [{ wc: '𑢽𑣂𑣌𑣝𑣁', txt: 'शिक्षा (पढ़ाई)' }, { wc: '𑢽𑣂𑣜𑣖𑣁', txt: 'षिरमा (आकाश)' }],
+        [{ wc: '𑢽𑣆𑣕𑣚', txt: 'शीतल (ठण्डा)' }],
+        [{ wc: '𑢽𑣃𑣌𑣃𑣜𑣁𑣙𑣁𑣜', txt: 'शुकुराहर (शुक्रवार)' }, { wc: '𑢽𑣃𑣌𑣓', txt: 'शुकन (नवम्बर)' }],
+        [{ wc: '𑢽𑣇𑣚', txt: 'शूल (शूल)' }],
+        [{ wc: '𑢽𑣈𑣜', txt: 'शेर (सिंह)' }],
+        [{ wc: '𑢽𑣁𑣂𑣚', txt: 'शैल (पर्वत)' }],
+        [{ wc: '𑢽𑣉𑣌𑣁', txt: 'षोका (षोका)' }],
+        [{ wc: '𑢽𑣁𑣃', txt: 'शौ (शौ ध्वनि)' }],
+        [{ wc: '𑢽𑣊𑣌𑣜', txt: 'शंकर (शंकर)' }],
+        [{ wc: '𑢽𑣄', txt: 'शः (शः ध्वनि)' }]
+      ],
+      'स': [
+        [{ wc: '𑢾𑣌𑣖', txt: 'सकम (पत्ता)' }, { wc: '𑢾𑣔𑣉𑣖', txt: 'सदोम (घोड़ा)' }],
+        [{ wc: '𑢾𑣁𑣜𑣎𑣉𑣖', txt: 'सारजोम (साल वृक्ष)' }, { wc: '𑢾𑣁𑣓', txt: 'सान (लकड़ी)' }],
+        [{ wc: '𑢾𑣂𑣊𑢫𑣂', txt: 'सिङगि (सूर्य)' }, { wc: '𑢾𑣂𑣖', txt: 'सिम (मुर्गा)' }],
+        [{ wc: '𑢾𑣆', txt: 'सी (जोतना)' }, { wc: '𑢸𑣃𑣞𑣆', txt: 'पुसी (बिल्ली)' }],
+        [{ wc: '𑢾𑣃𑣞𑣃𑣓', txt: 'सुसुन (नाचना)' }, { wc: '𑢾𑣃𑣌𑣃', txt: 'सुकु (खुशी/कद्दू)' }],
+        [{ wc: '𑢾𑣇𑣕𑣖', txt: 'सूतम (धागा)' }],
+        [{ wc: '𑢾𑣈𑣓', txt: 'सेन (जाना)' }, { wc: '𑢾𑣈𑣊𑣋𑣈𑣚', txt: 'सेंगेल (आग)' }],
+        [{ wc: '𑢾𑣁𑣂𑣚', txt: 'सैल (सैर)' }],
+        [{ wc: '𑢾𑣉𑣓𑣁', txt: 'सोना (सोना)' }, { wc: '𑢾𑣉𑣚𑣁', txt: 'सोला (सुलह)' }],
+        [{ wc: '𑢾𑣁𑣃', txt: 'सौ (सौ)' }],
+        [{ wc: '𑢾𑣊𑣋𑣂𑣓', txt: 'संगिन (दूर)' }],
+        [{ wc: '𑢾𑣃𑣄', txt: 'सुः (पत्तल सीना)' }]
+      ],
+      'व': [
+        [{ wc: '𑢿𑣓', txt: 'वन (वन)' }],
+        [{ wc: '𑢾𑣈𑣟𑣁', txt: 'सेवा (सेवा)' }, { wc: '𑢵𑣉𑣟𑣁', txt: 'तोवा (दूध)' }],
+        [{ wc: '𑢿𑣂𑣔𑣅𑣁', txt: 'विद्या (विद्या)' }],
+        [{ wc: '𑢿𑣆𑣜', txt: 'वीर (वीर)' }],
+        [{ wc: '𑢴𑣃𑣟𑣜', txt: 'दुवर (दरवाजा)' }],
+        [{ wc: '𑢿𑣇', txt: 'वू (वू ध्वनि)' }],
+        [{ wc: '𑢿𑣈𑣔', txt: 'वेद (वेद)' }],
+        [{ wc: '𑢿𑣁𑣂', txt: 'वै (वै ध्वनि)' }],
+        [{ wc: '𑢿𑣉', txt: 'वो (वो ध्वनि)' }],
+        [{ wc: '𑢿𑣁𑣃', txt: 'वौ (वौ ध्वनि)' }],
+        [{ wc: '𑢿𑣊𑣽', txt: 'वंश (वंश)' }],
+        [{ wc: '𑢩𑣟𑣁𑣄', txt: 'ओवः (घर)' }]
+      ]
+    };
+
     function renderBarahkhadi() {
       document.getElementById('consonant-selector').innerHTML = BASE_CONSONANTS.map((c, idx) => `
         <button type="button" onclick="selectedConsIdx=${idx}; renderBarahkhadi(); speakHo('${c.deva.split('/')[0].trim()}')" class="px-2.5 py-1.5 rounded-xl border text-xs font-bold transition flex items-center gap-1 ${idx === selectedConsIdx ? 'bg-[#14532d] text-white border-[#14532d]' : 'bg-stone-50 hover:bg-amber-50 text-slate-800 border-stone-200'}">
@@ -1717,20 +2380,43 @@
 
       const c = BASE_CONSONANTS[selectedConsIdx];
       const baseDeva = c.deva.split('/').pop().trim();
-      document.getElementById('barahkhadi-title').innerHTML = `'${baseDeva}' (<span class="wc-font">${c.cap} / ${c.small}</span>) की बारहखड़ी`;
+      const consKey = c.deva.trim();
+      const exListByMatra = BARAHKHADI_EXAMPLES[consKey] || [];
+      document.getElementById('barahkhadi-title').innerHTML = `'${baseDeva}' (<span class="wc-font">${c.cap} / ${c.small}</span>) की बारहखड़ी — उदाहरण शब्दों सहित`;
 
-      document.getElementById('barahkhadi-grid').innerHTML = MATRAS.map(m => {
+      document.getElementById('barahkhadi-grid').innerHTML = MATRAS.map((m, mIdx) => {
         const wcCombo = `${c.small}${m.wc}`;
         const devaCombo = `${baseDeva}${m.deva}`;
+        const exItems = exListByMatra[mIdx] || [{ wc: wcCombo, txt: `${devaCombo} (उदाहरण)` }];
+        const exHtml = exItems.map(ex => {
+          const safeExSpeak = ex.txt.replace(/'/g, "\\'");
+          const safeExWc = ex.wc.replace(/'/g, "\\'");
+          return `
+            <div onclick="event.stopPropagation(); speakHo('${safeExSpeak}', this)" class="mt-1 px-2 py-1 rounded-lg bg-white hover:bg-amber-100/80 border border-stone-200/90 text-left flex items-center justify-between gap-1 transition">
+              <div class="min-w-0">
+                <div class="wc-font text-sm font-bold text-[#14532d] leading-tight">${ex.wc}</div>
+                <div class="text-[10px] font-semibold text-slate-700 truncate">${ex.txt}</div>
+              </div>
+              <button type="button" onclick="event.stopPropagation(); copyText('${safeExWc}', '${safeExSpeak} कॉपी किया गया')" class="shrink-0 px-1 py-0.5 rounded bg-stone-100 hover:bg-[#14532d] hover:text-white text-[9px] font-bold" title="उदाहरण कॉपी करें">📋</button>
+            </div>
+          `;
+        }).join('');
+
         return `
           <div data-card="1" onclick="speakHo('${devaCombo}', this)" class="cursor-pointer p-3 rounded-2xl bg-stone-50 hover:bg-amber-50 border border-stone-200 hover:border-amber-400 text-center transition flex flex-col justify-between">
-            <div class="flex justify-between text-[10px] font-bold text-slate-400">
-              <span>${m.label}</span>
-              <span>🔊</span>
+            <div>
+              <div class="flex justify-between text-[10px] font-bold text-slate-400">
+                <span>${m.label}</span>
+                <span>🔊</span>
+              </div>
+              <div class="wc-font text-3xl font-bold text-[#14532d] my-1">${wcCombo}</div>
+              <div class="text-sm font-extrabold text-amber-800">${devaCombo}</div>
             </div>
-            <div class="wc-font text-3xl font-bold text-[#14532d] my-1.5">${wcCombo}</div>
-            <div class="text-sm font-extrabold text-amber-800">${devaCombo}</div>
-            <button type="button" onclick="event.stopPropagation(); copyText('${wcCombo}', '${devaCombo} कॉपी किया गया')" class="mt-2 py-1 rounded-lg bg-white hover:bg-[#14532d] hover:text-white border border-stone-200 text-[10px] font-bold transition">📋 कॉपी</button>
+            <div class="mt-1.5 pt-1.5 border-t border-stone-200/80">
+              <div class="text-[9px] font-bold text-slate-400 text-left">उदाहरण शब्द:</div>
+              ${exHtml}
+            </div>
+            <button type="button" onclick="event.stopPropagation(); copyText('${wcCombo}', '${devaCombo} कॉपी किया गया')" class="mt-2 py-1 rounded-lg bg-white hover:bg-[#14532d] hover:text-white border border-stone-200 text-[10px] font-bold transition">📋 अक्षर कॉपी</button>
           </div>
         `;
       }).join('');
@@ -1913,11 +2599,14 @@
     }
 
     function renderKeyboard() {
-      document.getElementById('virtual-kb-grid').innerHTML = ALPHABET.map(a => {
+      const kbGrid = document.getElementById('virtual-kb-grid');
+      if (!kbGrid) return;
+      kbGrid.innerHTML = ALPHABET.map(a => {
         const glyph = kbCase === 'cap' ? a.cap : a.small;
         const engShort = a.eng.split(' ')[0];
+        const safeDeva = a.deva.split('/')[0].trim().replace(/'/g, "\\'");
         return `
-          <button type="button" onclick="kbAppend('${glyph}', '${a.deva.split('/')[0].trim()}')" class="p-2 rounded-xl bg-stone-50 hover:bg-amber-100 border border-stone-200 flex flex-col items-center transition active:scale-95">
+          <button type="button" onclick="kbAppend('${glyph}', '${safeDeva}')" class="p-2 rounded-xl bg-stone-50 hover:bg-amber-100 border border-stone-200 flex flex-col items-center transition active:scale-95">
             <span class="wc-font text-xl font-bold text-[#14532d]">${glyph}</span>
             <span class="text-[9px] font-bold text-slate-700">${a.deva.split('/')[0].trim()}</span>
             <span class="text-[8px] font-mono font-bold text-emerald-700">${engShort}</span>
@@ -1938,6 +2627,361 @@
       const arr = Array.from(ta.value);
       arr.pop();
       ta.value = arr.join('');
+    }
+
+    // ==================== TAB 5: 5-10 EXAMPLES PER CHARACTER FOR TRANSLITERATION & KEYBOARD ====================
+    const KB_CHAR_EXAMPLES = {
+      1: [
+        { wc: '𑢶𑣀𑢫𑣚', deva: 'मंगल', hi: 'शुभ / मंगल' },
+        { wc: '𑢼𑣀𑢫', deva: 'रंग', hi: 'वर्ण / रंग' },
+        { wc: '𑢡𑣀𑣊', deva: 'अङ', hi: 'भोर / सवेरा' },
+        { wc: '𑢷𑣉𑣀𑢫𑣁', deva: 'बोंगा', hi: 'देवता / पूजा' },
+        { wc: '𑢾𑣀𑢫𑣜', deva: 'संगर', hi: 'शिकार' },
+        { wc: '𑢡𑣀𑣔𑣂', deva: 'अंदि', hi: 'विवाह / शादी' }
+      ],
+      2: [
+        { wc: '𑢡𑣖', deva: 'अम', hi: 'तुम' },
+        { wc: '𑢡𑣚𑣃', deva: 'आलु', hi: 'आलू' },
+        { wc: '𑢡𑣘𑣃', deva: 'अपु', hi: 'पिता' },
+        { wc: '𑢡𑣌𑣛𑣁', deva: 'अकड़ा', hi: 'अखड़ा / सभा स्थल' },
+        { wc: '𑢡𑣔𑣁', deva: 'अदा', hi: 'अदरक' },
+        { wc: '𑢡𑣋𑣃', deva: 'अगु', hi: 'लाना' },
+        { wc: '𑢡𑣜𑣄', deva: 'अरः', hi: 'लाल' },
+        { wc: '𑢬𑣁𑣖', deva: 'काम', hi: 'काम / कार्य' }
+      ],
+      3: [
+        { wc: '𑢢𑣘𑣂𑣚', deva: 'इपिल', hi: 'तारा' },
+        { wc: '𑢢𑣚𑣂', deva: 'इलि', hi: 'हँड़िया' },
+        { wc: '𑢢𑣓𑣃𑣊', deva: 'इनुङ', hi: 'खेलना' },
+        { wc: '𑢢𑣜𑣂𑣚', deva: 'इरिल', hi: 'आठ (8)' },
+        { wc: '𑢢𑣕𑣃', deva: 'इतु', hi: 'सीखना' },
+        { wc: '𑢢𑣔𑣂', deva: 'इदि', hi: 'ले जाना' },
+        { wc: '𑢢𑣒𑣁', deva: 'इटा', hi: 'ईंट' }
+      ],
+      4: [
+        { wc: '𑢣𑣚𑣂', deva: 'उलि', hi: 'आम' },
+        { wc: '𑢣𑣜𑣂𑣄', deva: 'उरिः', hi: 'गाय-बैल' },
+        { wc: '𑢣𑣖𑣗𑣃𑣚', deva: 'उम्बुल', hi: 'छाया' },
+        { wc: '𑢣𑣕𑣃', deva: 'उतु', hi: 'सब्जी' },
+        { wc: '𑢣𑣘𑣃𑣓', deva: 'उपुन', hi: 'चार (4)' },
+        { wc: '𑢣𑣗', deva: 'उब', hi: 'बाल' },
+        { wc: '𑢷𑣃𑣜𑣃', deva: 'बुरु', hi: 'पहाड़' }
+      ],
+      5: [
+        { wc: '𑢨𑣊𑢫𑣁', deva: 'एंगा', hi: 'माँ / माता' },
+        { wc: '𑢨𑣜𑣁', deva: 'एरा', hi: 'पत्नी / महिला' },
+        { wc: '𑢨𑣞𑣈𑣚', deva: 'एसेल', hi: 'गोरा' },
+        { wc: '𑢨𑣚𑣁', deva: 'एला', hi: 'आओ!' },
+        { wc: '𑢨𑣕𑣉', deva: 'एतो', hi: 'सिखाना' },
+        { wc: '𑢨𑣖', deva: 'एम', hi: 'देना' },
+        { wc: '𑢨𑣞𑣃', deva: 'एसु', hi: 'बहुत' }
+      ],
+      6: [
+        { wc: '𑢩𑣟𑣁𑣄', deva: 'ओवः', hi: 'घर' },
+        { wc: '𑢩𑣕𑣈', deva: 'ओते', hi: 'धरती / खेत' },
+        { wc: '𑢩𑣚', deva: 'ओल', hi: 'लिखना' },
+        { wc: '𑢩𑣛𑣁', deva: 'ओड़ा', hi: 'नहाना' },
+        { wc: '𑢩𑣅𑣜', deva: 'ओयर', hi: 'तैरना' },
+        { wc: '𑢩𑣖', deva: 'ओम', hi: 'देना' },
+        { wc: '𑢩𑣊𑣑𑣉𑣄', deva: 'ओंडोः', hi: 'और / तथा' }
+      ],
+      7: [
+        { wc: '𑢴𑣁𑣄', deva: 'दाः', hi: 'पानी' },
+        { wc: '𑢷𑣁𑣄', deva: 'बाः', hi: 'फूल' },
+        { wc: '𑢬𑣁𑣄', deva: 'काः', hi: 'कौआ' },
+        { wc: '𑢹𑣉𑣒𑣉𑣄', deva: 'होटोः', hi: 'गर्दन' },
+        { wc: '𑢺𑣁𑣂𑣄', deva: 'लाइः', hi: 'पेट' },
+        { wc: '𑢮𑣉𑣓𑣉𑣄', deva: 'जोनोः', hi: 'झाड़ू' },
+        { wc: '𑢩𑣟𑣁𑣄', deva: 'ओवः', hi: 'घर' }
+      ],
+      8: [
+        { wc: '𑢹𑣉𑣅𑣉', deva: 'होयो', hi: 'हवा' },
+        { wc: '𑢮𑣂𑣅𑣁', deva: 'जिया', hi: 'दादी / नानी' },
+        { wc: '𑢶𑣅𑣉𑣖', deva: 'मयोम', hi: 'खून / रक्त' },
+        { wc: '𑢵𑣅𑣈𑣓', deva: 'तयेन', hi: 'मगरमच्छ' },
+        { wc: '𑢷𑣂𑣅𑣃𑣜', deva: 'बियुर', hi: 'घूमना' },
+        { wc: '𑢴𑣉𑣅𑣁', deva: 'दोया', hi: 'पीठ' }
+      ],
+      9: [
+        { wc: '𑢦𑣆𑣖', deva: 'ईम', hi: 'कलेजा' },
+        { wc: '𑢮𑣆', deva: 'जी', hi: 'आत्मा / मन' },
+        { wc: '𑢷𑣆', deva: 'बी', hi: 'पेट भरना' },
+        { wc: '𑢵𑣆', deva: 'ती', hi: 'हाथ' },
+        { wc: '𑢾𑣆', deva: 'सी', hi: 'जोतना' },
+        { wc: '𑢸𑣆', deva: 'पी', hi: 'मैदान' }
+      ],
+      10: [
+        { wc: '𑢧𑣓', deva: 'ऊन', hi: 'ऊन' },
+        { wc: '𑢳𑣇', deva: 'नू', hi: 'पीना' },
+        { wc: '𑢺𑣇', deva: 'लू', hi: 'खाना परोसना' },
+        { wc: '𑢸𑣇𑣄', deva: 'पूः', hi: 'दोना' },
+        { wc: '𑢷𑣃𑣜𑣇', deva: 'बुरु', hi: 'पर्वत' }
+      ],
+      11: [
+        { wc: '𑢾𑣂𑣊𑢫𑣂', deva: 'सिङगि', hi: 'सूर्य' },
+        { wc: '𑢷𑣃𑣚𑣃𑣊', deva: 'बुलुङ', hi: 'नमक' },
+        { wc: '𑢴𑣃𑣜𑣊', deva: 'दुरङ', hi: 'गीत' },
+        { wc: '𑢶𑣜𑣊', deva: 'मरङ', hi: 'बड़ा / महान' },
+        { wc: '𑢾𑣂𑣕𑣃𑣊', deva: 'सितुङ', hi: 'तेज धूप' },
+        { wc: '𑢷𑣉𑣊𑢫𑣁', deva: 'बोंगा', hi: 'देवता' }
+      ],
+      12: [
+        { wc: '𑢫𑣁𑣛𑣁', deva: 'गाड़ा', hi: 'नदी' },
+        { wc: '𑢫𑣖𑣁', deva: 'गमा', hi: 'वर्षा' },
+        { wc: '𑢫𑣂𑣕𑣂𑣚', deva: 'गितिल', hi: 'बालू' },
+        { wc: '𑢫𑣃𑣓𑣑𑣂', deva: 'गुन्दि', hi: 'गाय' },
+        { wc: '𑢫𑣃𑣜𑣃', deva: 'गुरु', hi: 'शिक्षक' },
+        { wc: '𑢫𑣈𑣚', deva: 'गेल', hi: 'दस (10)' },
+        { wc: '𑢫𑣉𑣖', deva: 'गोम', hi: 'गेहूँ' }
+      ],
+      13: [
+        { wc: '𑢬𑣔𑣚', deva: 'कदल', hi: 'केला' },
+        { wc: '𑢬𑣒𑣁', deva: 'कटा', hi: 'पैर' },
+        { wc: '𑢬𑣕𑣃', deva: 'कतु', hi: 'चाकू' },
+        { wc: '𑢬𑣃𑣚𑣁', deva: 'कुला', hi: 'बाघ' },
+        { wc: '𑢬𑣂𑣚𑣂', deva: 'किलि', hi: 'गोत्र' },
+        { wc: '𑢬𑣁𑣖', deva: 'काम', hi: 'काम' },
+        { wc: '𑢬𑣈𑣛𑣁', deva: 'केड़ा', hi: 'भैंसा' }
+      ],
+      14: [
+        { wc: '𑢡𑣍', deva: 'अञ', hi: 'मैं' },
+        { wc: '𑢡𑣚𑣂𑣍', deva: 'अलिञ', hi: 'हम दोनों' },
+        { wc: '𑢷𑣂𑣍', deva: 'बिञ', hi: 'साँप' },
+        { wc: '𑢵𑣃𑣍', deva: 'तुञ', hi: 'तीर मारना' },
+        { wc: '𑢡𑣌𑣂𑣍', deva: 'अकिञ', hi: 'वे दोनों' }
+      ],
+      15: [
+        { wc: '𑢮𑣉𑣙𑣁𑣜', deva: 'जोहार', hi: 'प्रणाम / अभिवादन' },
+        { wc: '𑢮𑣉𑣎𑣉', deva: 'जोजो', hi: 'इमली' },
+        { wc: '𑢮𑣉𑣖', deva: 'जोम', hi: 'खाना' },
+        { wc: '𑢮𑣂𑣚𑣃', deva: 'जिलु', hi: 'मांस' },
+        { wc: '𑢮𑣃𑣛𑣂', deva: 'जुड़ि', hi: 'साथी / मित्र' },
+        { wc: '𑢮𑣋𑣜', deva: 'जगर', hi: 'बातचीत / भाषा' },
+        { wc: '𑢮𑣈𑣒𑣈', deva: 'जेटे', hi: 'धूप / गर्मी' }
+      ],
+      16: [
+        { wc: '𑢯𑣁𑣓𑣔𑣃𑣄', deva: 'चन्दुः', hi: 'चाँद' },
+        { wc: '𑢯𑣇𑣚𑣂', deva: 'चउलि', hi: 'चावल' },
+        { wc: '𑢯𑣈𑣍𑣛𑣈', deva: 'चेंड़े', hi: 'चिड़िया' },
+        { wc: '𑢯𑣕𑣉𑣖', deva: 'चतोम', hi: 'छाता' },
+        { wc: '𑢯𑣃𑣒𑣃', deva: 'चुटु', hi: 'चूहा' },
+        { wc: '𑢯𑣌𑣁', deva: 'चका', hi: 'पहिया' },
+        { wc: '𑢯𑣉𑣌𑣈', deva: 'चोके', hi: 'मेंढक' }
+      ],
+      17: [
+        { wc: '𑢮𑣉𑣐𑣉𑣄', deva: 'जोनोः', hi: 'झाड़ू' },
+        { wc: '𑢸𑣉𑣐𑣉𑣞𑣉', deva: 'पोणोसो', hi: 'कटहल' },
+        { wc: '𑢬𑣂𑣞𑣐', deva: 'किसण', hi: 'धनवान' },
+        { wc: '𑢬𑣐𑣁', deva: 'कणा', hi: 'अनाज माप' },
+        { wc: '𑢶𑣐𑣁', deva: 'मणा', hi: 'मना करना' }
+      ],
+      18: [
+        { wc: '𑢱𑣁𑣌𑣃𑣟𑣁', deva: 'डाकुवा', hi: 'ग्राम प्रचारक' },
+        { wc: '𑢱𑣂𑣓𑣑𑣁', deva: 'डिन्डा', hi: 'कुँवारा / कुँवारी' },
+        { wc: '𑢱𑣉𑣊𑣋𑣁', deva: 'डोंगा', hi: 'नाव' },
+        { wc: '𑢱𑣓𑣑𑣁𑣄', deva: 'डण्डः', hi: 'लाठी' },
+        { wc: '𑢱𑣃𑣌𑣂', deva: 'डुकि', hi: 'पेशाब' },
+        { wc: '𑢱𑣓𑣑𑣈', deva: 'डन्डे', hi: 'जुर्माना' }
+      ],
+      19: [
+        { wc: '𑢲𑣌𑣁', deva: 'टका', hi: 'रुपया' },
+        { wc: '𑢲𑣃𑣘𑣂', deva: 'टुपि', hi: 'टोपी' },
+        { wc: '𑢲𑣈𑣜', deva: 'टेर', hi: 'फेंकना' },
+        { wc: '𑢲𑣒𑣂', deva: 'टटि', hi: 'बाड़' },
+        { wc: '𑢲𑣉𑣒𑣁', deva: 'टोटा', hi: 'गोली' },
+        { wc: '𑢲𑣃𑣊𑣌𑣂', deva: 'टुंकि', hi: 'टोकरी' }
+      ],
+      20: [
+        { wc: '𑢳𑣂𑣔𑣁', deva: 'निदा', hi: 'रात' },
+        { wc: '𑢳𑣃𑣕𑣃𑣖', deva: 'नुतुम', hi: 'नाम' },
+        { wc: '𑢳𑣂𑣜', deva: 'निर', hi: 'दौड़ना' },
+        { wc: '𑢳𑣅𑣚', deva: 'नयल', hi: 'हल' },
+        { wc: '𑢳𑣉𑣋𑣉𑣔', deva: 'नोगोद्', hi: 'मीठा' },
+        { wc: '𑢳𑣁𑣄', deva: 'नाः', hi: 'अभी' },
+        { wc: '𑢳𑣈𑣚', deva: 'नेल', hi: 'देखना' }
+      ],
+      21: [
+        { wc: '𑢴𑣁𑣄', deva: 'दाः', hi: 'पानी' },
+        { wc: '𑢴𑣜𑣃', deva: 'दरु', hi: 'पेड़ / वृक्ष' },
+        { wc: '𑢴𑣂𑣜𑣂', deva: 'दिरि', hi: 'पत्थर' },
+        { wc: '𑢴𑣃𑣚𑣛', deva: 'दुलड़', hi: 'प्रेम / प्यार' },
+        { wc: '𑢴𑣃𑣜𑣊', deva: 'दुरङ', hi: 'गीत' },
+        { wc: '𑢴𑣂𑣞𑣃𑣖', deva: 'दिसुम', hi: 'देश' },
+        { wc: '𑢴𑣃𑣗', deva: 'दुब', hi: 'बैठना' }
+      ],
+      22: [
+        { wc: '𑢵𑣉𑣟𑣁', deva: 'तोवा', hi: 'दूध' },
+        { wc: '𑢵𑣂𑣞𑣂𑣊', deva: 'तिसिङ', hi: 'आज' },
+        { wc: '𑢵𑣃𑣜', deva: 'तुर', hi: 'उगना' },
+        { wc: '𑢵𑣃𑣅𑣃', deva: 'तुयु', hi: 'सियार' },
+        { wc: '𑢵𑢷𑣈𑣓', deva: 'तबेन', hi: 'चिउड़ा' },
+        { wc: '𑢵𑣚𑣁', deva: 'तला', hi: 'मध्य / बीच' },
+        { wc: '𑢵𑣉𑣚', deva: 'तोल', hi: 'बाँधना' }
+      ],
+      23: [
+        { wc: '𑢶𑣋𑣈', deva: 'मगे', hi: 'मागे पर्व' },
+        { wc: '𑢶𑣓𑣑𑣂', deva: 'मण्डि', hi: 'भात' },
+        { wc: '𑢶𑣜𑣁𑣄', deva: 'मरः', hi: 'मोर' },
+        { wc: '𑢶𑣈𑣜𑣉𑣖', deva: 'मेरोम', hi: 'बकरी' },
+        { wc: '𑢶𑣃𑣓𑣑𑣁', deva: 'मुण्डा', hi: 'मुखिया' },
+        { wc: '𑢶𑣔𑣌𑣖', deva: 'मदकम', hi: 'महुआ' },
+        { wc: '𑢶𑣜𑣞𑣚', deva: 'मरसल', hi: 'प्रकाश / उजाला' }
+      ],
+      24: [
+        { wc: '𑢷𑣃𑣜𑣃', deva: 'बुरु', hi: 'पहाड़ / पर्वत' },
+        { wc: '𑢷𑣁𑣄', deva: 'बाः', hi: 'फूल' },
+        { wc: '𑢷𑣗𑣁', deva: 'बबा', hi: 'धान' },
+        { wc: '𑢷𑣂𑣜', deva: 'बिर', hi: 'जंगल' },
+        { wc: '𑢷𑣃𑣋𑣂𑣓', deva: 'बुगिन', hi: 'अच्छा' },
+        { wc: '𑢷𑣓𑣁', deva: 'बना', hi: 'भालू' },
+        { wc: '𑢷𑣉𑣜𑣉', deva: 'बोरो', hi: 'डरना' }
+      ],
+      25: [
+        { wc: '𑢸𑣉𑣜𑣉𑣗', deva: 'पोरोब', hi: 'पर्व / त्योहार' },
+        { wc: '𑢸𑣃𑣕𑣖', deva: 'पुतम', hi: 'पण्डुक पक्षी' },
+        { wc: '𑢸𑣃𑣞𑣂', deva: 'पुसि', hi: 'बिल्ली' },
+        { wc: '𑢸𑣖𑣘𑣚', deva: 'पम्पल', hi: 'तितली' },
+        { wc: '𑢸𑣃𑣌𑣃𑣜𑣂', deva: 'पुकुरि', hi: 'तालाब' },
+        { wc: '𑢸𑣕𑣁', deva: 'पता', hi: 'पत्ता' },
+        { wc: '𑢸𑣛𑣟', deva: 'पड़व', hi: 'पढ़ना' }
+      ],
+      26: [
+        { wc: '𑢹𑣁𑣕𑣃', deva: 'हातु', hi: 'गाँव' },
+        { wc: '𑢹𑣉𑣜𑣁', deva: 'होरा', hi: 'रास्ता' },
+        { wc: '𑢹𑣌𑣃', deva: 'हकु', hi: 'मछली' },
+        { wc: '𑢹𑣕𑣂', deva: 'हति', hi: 'हाथी' },
+        { wc: '𑢹𑣉𑣅𑣉', deva: 'होयो', hi: 'हवा' },
+        { wc: '𑢹𑣞𑣁', deva: 'हसा', hi: 'मिट्टी / धरती' },
+        { wc: '𑢹𑣃𑣎𑣃𑣄', deva: 'हुजुः', hi: 'आना' }
+      ],
+      27: [
+        { wc: '𑢺𑣁𑣓𑣔𑣁', deva: 'लन्दा', hi: 'हँसना' },
+        { wc: '𑢺𑣃𑣕𑣃𑣜', deva: 'लुतुर', hi: 'कान' },
+        { wc: '𑢺𑣈𑣚', deva: 'लेल', hi: 'देखना' },
+        { wc: '𑢺𑣉𑣚𑣉', deva: 'लोलो', hi: 'गर्म' },
+        { wc: '𑢺𑣂𑣎𑣁𑣄', deva: 'लिजः', hi: 'कपड़ा' },
+        { wc: '𑢺𑣕𑣜', deva: 'लतर', hi: 'नीचे' },
+        { wc: '𑢺𑣔', deva: 'लद्', hi: 'रोटी / पीठा' }
+      ],
+      28: [
+        { wc: '𑢹𑣉𑣛𑣉', deva: 'होड़ो', hi: 'मनुष्य' },
+        { wc: '𑢫𑣛𑣁', deva: 'गड़ा', hi: 'नदी' },
+        { wc: '𑢮𑣃𑣛𑣂', deva: 'जुड़ि', hi: 'मित्र / साथी' },
+        { wc: '𑢴𑣃𑣚𑣛', deva: 'दुलड़', hi: 'प्रेम' },
+        { wc: '𑢬𑣃𑣛𑣂', deva: 'कुड़ि', hi: 'लड़की / महिला' },
+        { wc: '𑢹𑣛𑣖', deva: 'हड़म', hi: 'बूढ़ा / पति' }
+      ],
+      29: [
+        { wc: '𑢼𑣁𑣎𑣁', deva: 'राजा', hi: 'राजा' },
+        { wc: '𑢼𑣃𑣕𑣃', deva: 'रुतु', hi: 'बाँसुरी' },
+        { wc: '𑢼𑣂𑣖𑣂𑣚', deva: 'रिमिल', hi: 'बादल' },
+        { wc: '𑢼𑣓𑣃', deva: 'रनु', hi: 'औषधि' },
+        { wc: '𑢼𑣃𑣘𑣁', deva: 'रुपा', hi: 'चाँदी' },
+        { wc: '𑢼𑣗𑣊', deva: 'रबङ', hi: 'ठण्डा / सर्दी' },
+        { wc: '𑢼𑣏𑣁', deva: 'रचा', hi: 'आँगन' }
+      ],
+      30: [
+        { wc: '𑢽𑣂𑣌𑣝𑣁', deva: 'शिक्षा', hi: 'पढ़ाई / शिक्षा' },
+        { wc: '𑢽𑣃𑣌𑣃𑣜𑣁𑣙𑣁𑣜', deva: 'शुकुराहर', hi: 'शुक्रवार' },
+        { wc: '𑢽𑣃𑣌𑣓', deva: 'शुकन', hi: 'नवम्बर' },
+        { wc: '𑢽𑣃𑣖', deva: 'षुम', hi: 'सूंघना' },
+        { wc: '𑢽𑣂𑣜𑣖𑣁', deva: 'षिरमा', hi: 'आकाश' }
+      ],
+      31: [
+        { wc: '𑢾𑣁𑣜𑣎𑣉𑣖', deva: 'सारजोम', hi: 'साल वृक्ष' },
+        { wc: '𑢾𑣈𑣊𑣋𑣈𑣚', deva: 'सेंगेल', hi: 'आग' },
+        { wc: '𑢾𑣂𑣊𑢫𑣂', deva: 'सिङगि', hi: 'सूर्य' },
+        { wc: '𑢾𑣃𑣞𑣃𑣓', deva: 'सुसुन', hi: 'नाचना' },
+        { wc: '𑢾𑣈𑣕𑣁', deva: 'सेता', hi: 'कुत्ता' },
+        { wc: '𑢾𑣌𑣖', deva: 'सकम', hi: 'पत्ता' },
+        { wc: '𑢾𑣔𑣉𑣖', deva: 'सदोम', hi: 'घोड़ा' },
+        { wc: '𑢾𑣈𑣓', deva: 'सेन', hi: 'जाना' }
+      ],
+      32: [
+        { wc: '𑢾𑣈𑣟𑣁', deva: 'सेवा', hi: 'सेवा' },
+        { wc: '𑢩𑣟𑣁𑣄', deva: 'ओवः', hi: 'घर' },
+        { wc: '𑢴𑣃𑣟𑣜', deva: 'दुवर', hi: 'दरवाजा' },
+        { wc: '𑢼𑣉𑣟𑣁', deva: 'रोवा', hi: 'आत्मा / रोपना' },
+        { wc: '𑢵𑣉𑣟𑣁', deva: 'तोवा', hi: 'दूध' },
+        { wc: '𑢬𑣉𑣟𑣁', deva: 'कोवा', hi: 'लड़का / पुरुष' }
+      ]
+    };
+
+    let selectedKbExCharId = 2;
+
+    function loadWordToTransliterator(devaWord) {
+      const inp = document.getElementById('deva-input');
+      if (!inp) return;
+      inp.value = devaWord;
+      runTransliterator();
+      speakHo(devaWord);
+      showToast(`"${devaWord}" लिप्यंतरण में डाला गया`, '✍️');
+    }
+
+    function insertWordToKeyboard(wcWord, devaWord) {
+      const ta = document.getElementById('kb-textarea');
+      if (!ta) return;
+      ta.value = ta.value ? `${ta.value} ${wcWord}` : wcWord;
+      speakHo(devaWord);
+      showToast(`"${wcWord}" कीबोर्ड में जोड़ा गया`, '⌨️');
+    }
+
+    function renderKbCharExamples(charId = selectedKbExCharId) {
+      selectedKbExCharId = charId;
+      const selectorEl = document.getElementById('kb-ex-char-selector');
+      if (selectorEl) {
+        selectorEl.innerHTML = ALPHABET.map(a => `
+          <button type="button" onclick="renderKbCharExamples(${a.id}); speakHo('${a.deva.split('/')[0].trim()}')" class="px-2.5 py-1.5 rounded-xl border text-xs font-bold transition flex items-center gap-1 ${a.id === selectedKbExCharId ? 'bg-[#14532d] text-white border-[#14532d]' : 'bg-stone-50 hover:bg-amber-50 text-slate-800 border-stone-200'}">
+            <span class="wc-font text-base">${a.cap}</span>
+            <span>${a.deva.split('/')[0].trim()}</span>
+          </button>
+        `).join('');
+      }
+
+      const charObj = ALPHABET.find(a => a.id === selectedKbExCharId) || ALPHABET[1];
+      const titleEl = document.getElementById('kb-ex-title');
+      if (titleEl) {
+        titleEl.innerHTML = `अक्षर '${charObj.deva}' (<span class="wc-font">${charObj.cap} / ${charObj.small}</span>) के लिप्यंतरण एवं लेखन अभ्यास शब्द`;
+      }
+
+      const examples = KB_CHAR_EXAMPLES[selectedKbExCharId] || [];
+      const gridEl = document.getElementById('kb-ex-grid');
+      if (gridEl) {
+        gridEl.innerHTML = examples.map((item, idx) => {
+          const safeDeva = item.deva.replace(/'/g, "\\'");
+          const safeWc = item.wc.replace(/'/g, "\\'");
+          const safeFull = `${item.deva} (${item.hi})`.replace(/'/g, "\\'");
+          return `
+            <div data-card="1" onclick="speakHo('${safeFull}', this)" class="cursor-pointer p-3 rounded-xl bg-stone-50 hover:bg-amber-50/70 border border-stone-200 hover:border-amber-400 transition flex flex-col justify-between gap-2">
+              <div class="flex items-start justify-between gap-2">
+                <div>
+                  <div class="text-[10px] font-mono font-bold text-slate-400">#${idx + 1} • ${item.hi}</div>
+                  <div class="wc-font text-2xl font-bold text-[#14532d] mt-0.5">${item.wc}</div>
+                  <div class="text-sm font-extrabold text-amber-800">${item.deva}</div>
+                </div>
+                <div class="flex items-center gap-1 shrink-0">
+                  <button type="button" onclick="event.stopPropagation(); speakHo('${safeFull}', this)" class="px-2 py-1 rounded-lg bg-amber-100 hover:bg-amber-400 text-xs font-bold" title="सुनें">🔊</button>
+                  <button type="button" onclick="event.stopPropagation(); copyText('${safeWc}', '${safeDeva} कॉपी किया गया')" class="px-2 py-1 rounded-lg bg-emerald-100 hover:bg-[#14532d] hover:text-white text-xs font-bold" title="कॉपी करें">📋</button>
+                </div>
+              </div>
+              <div class="flex items-center gap-1.5 pt-1.5 border-t border-stone-200/80 text-[11px]">
+                <button type="button" onclick="event.stopPropagation(); loadWordToTransliterator('${safeDeva}')" class="flex-1 py-1 px-2 rounded-lg bg-white hover:bg-[#14532d] hover:text-white border border-stone-300 font-bold transition">
+                  ✍️ लिप्यंतरण में डालें
+                </button>
+                <button type="button" onclick="event.stopPropagation(); insertWordToKeyboard('${safeWc}', '${safeDeva}')" class="flex-1 py-1 px-2 rounded-lg bg-white hover:bg-amber-500 hover:text-slate-950 border border-stone-300 font-bold transition">
+                  ⌨️ कीबोर्ड में जोड़ें
+                </button>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+    }
+
+    function playAllKbExamples() {
+      const examples = KB_CHAR_EXAMPLES[selectedKbExCharId] || [];
+      const seq = examples.map(e => `${e.deva} (${e.hi})`).join(', ');
+      speakHo(seq);
     }
 
     // ==================== TAB 6: QUIZ ====================
@@ -2072,6 +3116,7 @@
         renderDictionary();
         runTransliterator();
         renderKeyboard();
+        renderKbCharExamples(2);
         renderReadQuiz();
       } catch (err) {
         console.error('Initialization error:', err);
