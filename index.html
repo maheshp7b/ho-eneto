@@ -4,6 +4,41 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>𑢹𑣉 𑢨𑣓𑣈𑣕𑣉 — Ho Eneto | वारंग क्षिति एवं 'हो' भाषा शिक्षण ऐप</title>
+
+  <!-- Website & Home Screen Shortcut Icon -->
+  <meta name="theme-color" content="#14532d" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <link id="site-icon" rel="icon" type="image/jpeg" href="https://i.ibb.co/kVDMQBpr/download.jpg" />
+  <link id="apple-icon" rel="apple-touch-icon" href="https://i.ibb.co/kVDMQBpr/download.jpg" />
+  <link id="pwa-manifest" rel="manifest" />
+  <script>
+    (function () {
+      const iconUrl = "https://i.ibb.co/kVDMQBpr/download.jpg";
+      const siteIcon = document.getElementById("site-icon");
+      const appleIcon = document.getElementById("apple-icon");
+      if (siteIcon) siteIcon.href = iconUrl;
+      if (appleIcon) appleIcon.href = iconUrl;
+
+      const manifestData = {
+        name: document.title || "Ho Eneto",
+        short_name: "Ho Eneto",
+        start_url: "./",
+        display: "standalone",
+        background_color: "#14532d",
+        theme_color: "#14532d",
+        icons: [
+          { src: iconUrl, sizes: "192x192", type: "image/jpeg", purpose: "any maskable" },
+          { src: iconUrl, sizes: "512x512", type: "image/jpeg", purpose: "any maskable" }
+        ]
+      };
+
+      const blob = new Blob([JSON.stringify(manifestData)], { type: "application/manifest+json" });
+      const manifestEl = document.getElementById("pwa-manifest");
+      if (manifestEl) manifestEl.href = URL.createObjectURL(blob);
+    })();
+  </script>
+
   <!-- Load Noto Sans Devanagari and Noto Sans Warang Citi fonts cleanly -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
