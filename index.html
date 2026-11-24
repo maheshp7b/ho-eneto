@@ -353,8 +353,8 @@
         <div class="border-t border-stone-200 pt-4 space-y-4">
           <div class="flex flex-wrap items-center justify-between gap-2">
             <div>
-              <h2 id="barahkhadi-title" class="text-lg font-extrabold text-[#14532d]">'क' (𑢬 / 𑣌) की बारहखड़ी एवं उदाहरण शब्द</h2>
-              <p class="text-xs text-slate-500">प्रत्येक मात्रा कार्ड पर 3–5 उदाहरण शब्द दिए गए हैं — किसी भी अक्षर या शब्द को छूकर उच्चारण सुनें</p>
+              <h2 id="barahkhadi-title" class="text-lg font-extrabold text-[#14532d]">'क' (𑢬 / 𑣌) की बारहखड़ी — उदाहरण शब्दों सहित (4-Language)</h2>
+              <p class="text-xs text-slate-500">प्रत्येक मात्रा पर न्यूनतम 2–3 उदाहरण शब्द (वारंग क्षिति • हो • English • हिन्दी) — किसी भी शब्द को छूकर उच्चारण सुनें</p>
             </div>
             <div class="flex flex-wrap items-center gap-2">
               <button type="button" onclick="playCurrentBarahkhadi()" class="px-3.5 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-extrabold transition">
@@ -2851,7 +2851,11 @@
       { wc: '𑢣𑣕𑣂', ho: 'उति (uti)', en: 'uti — field rat / mouse', hi: 'खेत का चूहा', cat: 'nature' }
     ];
 
-    // ==================== FULL DICTIONARY QUIZ GENERATOR ====================
+    // ==================== FULL DICTIONARY 4-LANGUAGE QUIZ GENERATOR ====================
+    let activeShrutilekhQ = null;
+    let activeReadQ = null;
+    let activeListenQ = null;
+
     function buildGentleDictionaryOrder(list) {
       const arr = list.slice();
       for (let i = 0; i < arr.length - 3; i += 4) {
@@ -2867,13 +2871,33 @@
 
     const QUIZ_DECK = buildGentleDictionaryOrder(DICTIONARY);
 
+    function format4LangEntry(entry) {
+      const cleanHo = (entry.ho || '').replace(/\s*\(.*?\)/g, '').trim();
+      const parenMatch = (entry.ho || '').match(/\((.*?)\)/);
+      const romanHo = parenMatch ? parenMatch[1].trim() : cleanHo;
+      const cleanEn = (entry.en || '').trim();
+      const cleanHi = (entry.hi || '').trim();
+      const wc = (entry.wc || '').trim();
+      return {
+        wc,
+        ho: cleanHo,
+        roman: romanHo,
+        en: cleanEn,
+        hi: cleanHi,
+        uid: `${wc}||${cleanHo}||${cleanEn}||${cleanHi}`,
+        fullText: `वारंग क्षिति: ${wc} | हो: ${cleanHo} (${romanHo}) | English: ${cleanEn} | हिन्दी: ${cleanHi}`,
+        spokenText: `हो शब्द ${cleanHo}. हिन्दी अर्थ: ${cleanHi}. English meaning: ${cleanEn}.`
+      };
+    }
+
     function getDistractors(correctItem, count = 3) {
       const picks = [];
-      const total = DICTIONARY.length;
-      const baseIdx = DICTIONARY.indexOf(correctItem);
-      const offsets = [7, 19, 43, 71, 103, 137, 173, 211];
+      const deck = (typeof QUIZ_DECK !== 'undefined' && QUIZ_DECK.length) ? QUIZ_DECK : DICTIONARY;
+      const total = deck.length;
+      const baseIdx = Math.max(0, deck.indexOf(correctItem));
+      const offsets = [7, 19, 43, 71, 103, 137, 173, 211, 257, 307];
       for (let k = 0; k < offsets.length && picks.length < count; k++) {
-        const cand = DICTIONARY[(Math.max(0, baseIdx) + offsets[k]) % total];
+        const cand = deck[(baseIdx + offsets[k]) % total];
         if (cand && cand.ho !== correctItem.ho && !picks.some(p => p.ho === cand.ho)) {
           picks.push(cand);
         }
@@ -2881,22 +2905,32 @@
       return picks;
     }
 
+    function shuffleArray(arr) {
+      const copy = arr.slice();
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
+    }
+
     function getReadQuestion(idx) {
       const deck = (typeof QUIZ_DECK !== 'undefined' && QUIZ_DECK.length) ? QUIZ_DECK : DICTIONARY;
       const item = deck[idx % deck.length];
       const distractors = getDistractors(item, 3);
       const answerObj = format4LangEntry(item);
-      const rawOpts = [item, ...distractors];
-      for (let i = rawOpts.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [rawOpts[i], rawOpts[j]] = [rawOpts[j], rawOpts[i]];
-      }
+      const options = shuffleArray([item, ...distractors]).map(format4LangEntry);
       return {
         wc: answerObj.wc,
+        ho: answerObj.ho,
+        roman: answerObj.roman,
+        en: answerObj.en,
+        hi: answerObj.hi,
+        correctUid: answerObj.uid,
         enPrompt: `हिन्दी अर्थ: "${answerObj.hi}" | English: "${answerObj.en}" | हो (रोमन): "${answerObj.roman}"`,
         answer: answerObj.fullText,
         spoken: answerObj.spokenText,
-        options: rawOpts.map(format4LangEntry)
+        options
       };
     }
 
@@ -2905,18 +2939,18 @@
       const item = deck[idx % deck.length];
       const distractors = getDistractors(item, 3);
       const f = format4LangEntry(item);
-      const rawOpts = [item, ...distractors];
-      for (let i = rawOpts.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [rawOpts[i], rawOpts[j]] = [rawOpts[j], rawOpts[i]];
-      }
+      const opts = shuffleArray([item, ...distractors]).map(format4LangEntry);
       return {
         spoken: f.spokenText,
-        hint: `हिन्दी: ${f.hi} | English: ${f.en} | हो: ${f.ho}`,
+        hint: `हिन्दी: ${f.hi} | English: ${f.en} | हो: ${f.ho} (${f.roman})`,
         wc: f.wc,
         ho: f.ho,
+        roman: f.roman,
+        en: f.en,
+        hi: f.hi,
+        correctUid: f.uid,
         answerText: f.fullText,
-        opts: rawOpts.map(format4LangEntry)
+        opts
       };
     }
 
@@ -3270,8 +3304,8 @@
       }
     }
 
-    // ==================== TAB 2: BARAHKHADI RENDER WITH 3–5 EXAMPLE WORDS ====================
-    function getBarahkhadiExamples(c, m, minCount = 3, maxCount = 5) {
+    // ==================== TAB 2: BARAHKHADI RENDER WITH 2–3 4-LANGUAGE EXAMPLE WORDS ====================
+    function getBarahkhadiExamples(c, m, minCount = 2, maxCount = 3) {
       const baseDeva = c.deva.split('/').pop().trim();
       const altDeva = c.deva.split('/')[0].trim();
       const syllableDeva = `${baseDeva}${m.deva}`;
@@ -3300,7 +3334,6 @@
           wcStr.includes(syllableWcSmall) ||
           wcStr.includes(syllableWcCap);
 
-        // Avoid matching bare consonant when matra is followed by another matra in Devanagari
         const isBareMatra = m.deva === '';
         const hasFollowingMatra = (word, syl) => {
           const idx = word.indexOf(syl);
@@ -3309,34 +3342,41 @@
           return /[ािीुूेैोौंः]/.test(nextCh);
         };
 
+        const entryObj = {
+          wc: wcStr,
+          ho: cleanHo,
+          en: (item.en || '').trim(),
+          hi: (item.hi || '').trim()
+        };
+
         if (startsMatch && (!isBareMatra || !hasFollowingMatra(cleanHo, syllableDeva))) {
           seen.add(cleanHo);
-          exactStart.push({ wc: wcStr, ho: cleanHo, hi: item.hi });
+          exactStart.push(entryObj);
         } else if (insideMatch && (!isBareMatra || !hasFollowingMatra(cleanHo, syllableDeva))) {
           seen.add(cleanHo);
-          anywhereMatch.push({ wc: wcStr, ho: cleanHo, hi: item.hi });
+          anywhereMatch.push(entryObj);
         }
       });
 
       const combined = [...exactStart, ...anywhereMatch].slice(0, maxCount);
 
-      // Ensure minimum 3–4 illustrative Ho syllable-practice examples even for rare consonant+matra pairs
+      // Ensure minimum 2–3 illustrative 4-language examples even for rare consonant+matra pairs
       if (combined.length < minCount) {
         const templates = [
-          { sufDeva: 'म', sufWc: '𑣖', label: 'अभ्यास शब्द 1' },
-          { sufDeva: 'र', sufWc: '𑣜', label: 'अभ्यास शब्द 2' },
-          { sufDeva: 'ल', sufWc: '𑣚', label: 'अभ्यास शब्द 3' },
-          { sufDeva: 'न', sufWc: '𑣓', label: 'अभ्यास शब्द 4' }
+          { sufDeva: 'म', sufWc: '𑣖', enSuffix: 'syllable word', hiSuffix: 'ध्वनि शब्द' },
+          { sufDeva: 'र', sufWc: '𑣜', enSuffix: 'practice term', hiSuffix: 'अभ्यास पद' },
+          { sufDeva: 'ल', sufWc: '𑣚', enSuffix: 'phonetic form', hiSuffix: 'उच्चारण रूप' }
         ];
         for (let t of templates) {
-          if (combined.length >= 4) break;
+          if (combined.length >= minCount) break;
           const genHo = `${syllableDeva}${t.sufDeva}`;
           if (!seen.has(genHo)) {
             seen.add(genHo);
             combined.push({
               wc: `${syllableWcCap}${t.sufWc}`,
               ho: genHo,
-              hi: `${syllableDeva} ध्वनि अभ्यास`
+              en: `${syllableDeva} ${t.enSuffix}`,
+              hi: `${syllableDeva} ${t.hiSuffix}`
             });
           }
         }
@@ -3355,34 +3395,37 @@
 
       const c = BASE_CONSONANTS[selectedConsIdx];
       const baseDeva = c.deva.split('/').pop().trim();
-      document.getElementById('barahkhadi-title').innerHTML = `'${baseDeva}' (<span class="wc-font">${c.cap} / ${c.small}</span>) की बारहखड़ी एवं उदाहरण शब्द (3–5 प्रति मात्रा)`;
+      document.getElementById('barahkhadi-title').innerHTML = `'${baseDeva}' (<span class="wc-font">${c.cap} / ${c.small}</span>) की बारहखड़ी — उदाहरण शब्दों सहित (4-Language • 2–3 शब्द)`;
 
       document.getElementById('barahkhadi-grid').innerHTML = MATRAS.map(m => {
         const wcComboCap = `${c.cap}${m.wc}`;
         const wcComboSmall = `${c.small}${m.wc}`;
         const devaCombo = `${baseDeva}${m.deva}`;
-        const examples = getBarahkhadiExamples(c, m, 3, 5);
-        const allWordsSpeak = examples.map(ex => ex.ho).join(', ');
+        const examples = getBarahkhadiExamples(c, m, 2, 3);
+        const allWordsSpeak = examples.map(ex => `${ex.ho}, ${ex.hi}, ${ex.en}`).join('; ');
         const safeAllWordsSpeak = allWordsSpeak.replace(/'/g, "\'");
 
         const examplesHtml = examples.map((ex, i) => {
           const safeHo = escapeHtml(ex.ho);
           const safeWc = escapeHtml(ex.wc);
           const safeHi = escapeHtml(ex.hi || '');
-          const speakTarget = `${ex.ho}`.replace(/'/g, "\'");
+          const safeEn = escapeHtml(ex.en || '');
+          const speakTarget = `${ex.ho}, ${ex.hi}, ${ex.en}`.replace(/'/g, "\'");
+          const copyPayload = `${ex.wc} | ${ex.ho} | ${ex.en} | ${ex.hi}`.replace(/'/g, "\'");
           return `
-            <div onclick="event.stopPropagation(); speakHo('${speakTarget}', this)" class="touch-card flex items-center justify-between gap-1.5 px-2.5 py-1.5 rounded-xl bg-white hover:bg-amber-100/80 border border-stone-200/90 text-left">
-              <div class="min-w-0 flex-1">
+            <div onclick="event.stopPropagation(); speakHo('${speakTarget}', this)" class="touch-card flex items-start justify-between gap-1.5 px-2.5 py-2 rounded-xl bg-white hover:bg-amber-100/80 border border-stone-200/90 text-left">
+              <div class="min-w-0 flex-1 space-y-0.5">
                 <div class="flex items-center gap-1.5 flex-wrap">
                   <span class="text-[10px] font-mono text-slate-400">${i + 1}.</span>
                   <span class="wc-font text-sm sm:text-base font-bold text-[#14532d]">${safeWc}</span>
-                  <span class="text-xs font-extrabold text-amber-900">${safeHo}</span>
+                  <span class="text-xs font-extrabold text-amber-950">${safeHo}</span>
                 </div>
-                <div class="text-[10px] text-slate-600 truncate pl-3.5">${safeHi}</div>
+                <div class="text-[10px] font-semibold text-emerald-900 pl-3.5 break-words">हिन्दी: ${safeHi}</div>
+                <div class="text-[10px] font-mono text-slate-600 pl-3.5 break-words">EN: ${safeEn}</div>
               </div>
-              <div class="flex items-center gap-1 shrink-0">
+              <div class="flex flex-col items-center gap-1 shrink-0">
                 <span class="text-[11px] text-amber-700 font-bold" title="सुनें">🔊</span>
-                <button type="button" onclick="event.stopPropagation(); copyText('${safeWc}', '${safeHo} कॉपी किया गया')" class="px-1.5 py-0.5 rounded bg-stone-100 hover:bg-[#14532d] hover:text-white text-[10px] font-bold transition" title="कॉपी करें">📋</button>
+                <button type="button" onclick="event.stopPropagation(); copyText('${copyPayload}', '${safeHo} (4-भाषा) कॉपी किया गया')" class="px-1.5 py-0.5 rounded bg-stone-100 hover:bg-[#14532d] hover:text-white text-[10px] font-bold transition" title="4-भाषा कॉपी करें">📋</button>
               </div>
             </div>
           `;
@@ -3395,7 +3438,7 @@
                 <span class="px-2 py-0.5 rounded-md bg-emerald-100/80 text-emerald-900">${m.label}</span>
                 <span class="text-amber-700">🔊 अक्षर सुनें</span>
               </div>
-              <div class="flex items-center justify-center gap-3 my-2 py-1.5 rounded-xl bg-white border border-stone-200/80">
+              <div class="flex items-center justify-center gap-2.5 my-2 py-1.5 rounded-xl bg-white border border-stone-200/80">
                 <span class="wc-font text-2xl sm:text-3xl font-bold text-[#14532d]" title="मरङ ओल्">${wcComboCap}</span>
                 <span class="text-stone-300">|</span>
                 <span class="wc-font text-2xl sm:text-3xl font-bold text-amber-700" title="हुड़िङ ओल्">${wcComboSmall}</span>
@@ -3435,7 +3478,7 @@
       const baseDeva = c.deva.split('/').pop().trim();
       const seq = MATRAS.map(m => {
         const devaCombo = `${baseDeva}${m.deva}`;
-        const ex = getBarahkhadiExamples(c, m, 3, 5).map(e => e.ho).join(', ');
+        const ex = getBarahkhadiExamples(c, m, 2, 3).map(e => `${e.ho}, ${e.hi}`).join(', ');
         return `${devaCombo} — ${ex}`;
       }).join('। ');
       speakHo(seq);
@@ -3733,41 +3776,20 @@
       }).join('');
     }
 
-    // ==================== TAB 6: SHRUTILEKH & QUIZ (4-LANGUAGE) ====================
-    function format4LangEntry(entry) {
-      const cleanHo = (entry.ho || '').replace(/\s*\(.*?\)/g, '').trim();
-      const parenMatch = (entry.ho || '').match(/\((.*?)\)/);
-      const romanHo = parenMatch ? parenMatch[1].trim() : cleanHo;
-      const cleanEn = (entry.en || '').trim();
-      const cleanHi = (entry.hi || '').trim();
-      const wc = (entry.wc || '').trim();
-      return {
-        wc,
-        ho: cleanHo,
-        roman: romanHo,
-        en: cleanEn,
-        hi: cleanHi,
-        fullText: `वारंग क्षिति: ${wc} | हो: ${cleanHo} (${romanHo}) | English: ${cleanEn} | हिन्दी: ${cleanHi}`,
-        spokenText: `हो शब्द ${cleanHo}. हिन्दी अर्थ: ${cleanHi}. English meaning: ${cleanEn}.`
-      };
-    }
-
+    // ==================== TAB 6: SHRUTILEKH & QUIZ (4-LANGUAGE & ACCURATE ANSWER CHECK) ====================
     function getShrutilekhItem(idx) {
       const deck = (typeof QUIZ_DECK !== 'undefined' && QUIZ_DECK.length) ? QUIZ_DECK : DICTIONARY;
       const entry = deck[idx % deck.length];
       const distractors = getDistractors(entry, 3);
       const f = format4LangEntry(entry);
-      const rawOpts = [entry, ...distractors];
-      for (let i = rawOpts.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [rawOpts[i], rawOpts[j]] = [rawOpts[j], rawOpts[i]];
-      }
+      const choices = shuffleArray([entry, ...distractors]).map(format4LangEntry);
       return {
         ...f,
+        correctUid: f.uid,
         spoken: f.spokenText,
         hint: `4-भाषा संकेत — हो: ${f.ho} [${f.roman}] | हिन्दी: ${f.hi} | English: ${f.en}`,
         answerText: f.fullText,
-        choices: rawOpts.map(format4LangEntry)
+        choices
       };
     }
 
@@ -3811,7 +3833,7 @@
       const safeEn = escapeHtml(item.en);
       const safeHi = escapeHtml(item.hi);
       return `
-        <button type="button" onclick="${clickHandlerAttr}" class="p-3.5 rounded-xl border border-stone-300 hover:border-[#14532d] bg-white hover:bg-emerald-50 text-left transition flex flex-col gap-1.5">
+        <button type="button" onclick="${clickHandlerAttr}" class="quiz-opt-btn p-3.5 rounded-xl border border-stone-300 hover:border-[#14532d] bg-white hover:bg-emerald-50 text-left transition flex flex-col gap-1.5">
           <div class="flex items-center justify-between gap-2">
             <span class="wc-font text-2xl font-bold text-[#14532d]">${safeWc}</span>
             <span class="px-2.5 py-0.5 rounded-lg bg-amber-100 text-amber-950 text-xs font-extrabold">हो: ${safeHo} <span class="font-mono text-[10px]">(${safeRoman})</span></span>
@@ -3829,7 +3851,8 @@
       const deck = (typeof QUIZ_DECK !== 'undefined' && QUIZ_DECK.length) ? QUIZ_DECK : DICTIONARY;
       const prog = document.getElementById('quiz-progress-badge');
       if (prog) prog.textContent = `4-भाषा श्रुतिलेख • प्रश्न #${qTotal + 1} / ${deck.length}`;
-      const item = getShrutilekhItem(shrutilekhIdx);
+      activeShrutilekhQ = getShrutilekhItem(shrutilekhIdx);
+      const item = activeShrutilekhQ;
       const enEl = document.getElementById('s-dictation-en');
       const hintEl = document.getElementById('s-dictation-hint');
       const inp = document.getElementById('s-dictation-input');
@@ -3852,7 +3875,8 @@
     }
 
     function speakShrutilekhPrompt(btn) {
-      speakHo(getShrutilekhItem(shrutilekhIdx).spoken, btn);
+      const item = activeShrutilekhQ || getShrutilekhItem(shrutilekhIdx);
+      speakHo(item.spoken, btn);
     }
 
     function checkShrutilekhAnswer() {
@@ -3862,7 +3886,7 @@
       if (!val) { showToast('कृपया पहले शब्द लिखें या 4-भाषा कार्ड चुनें', '✍️'); return; }
       qLocked = true;
       qTotal++;
-      const item = getShrutilekhItem(shrutilekhIdx);
+      const item = activeShrutilekhQ || getShrutilekhItem(shrutilekhIdx);
       const ok =
         val === item.wc.toLowerCase() ||
         val === item.ho.toLowerCase() ||
@@ -3873,7 +3897,7 @@
       if (ok) {
         qScore++;
         playChime(659.25, 0.2);
-        showQuizFeedback(true, `🎉 सही उत्तर! <span class="wc-font text-base sm:text-lg">${escapeHtml(item.answerText)}</span>`);
+        showQuizFeedback(true, `✅ सही उत्तर! <span class="wc-font text-base sm:text-lg">${escapeHtml(item.answerText)}</span>`);
       } else {
         playChime(293.66, 0.22);
         showQuizFeedback(false, `❌ सही उत्तर: <span class="wc-font text-base sm:text-lg">${escapeHtml(item.answerText)}</span>`);
@@ -3884,20 +3908,23 @@
 
     function pickShrutilekhChoice(btn, idx) {
       if (qLocked) return;
-      const item = getShrutilekhItem(shrutilekhIdx);
+      const item = activeShrutilekhQ || getShrutilekhItem(shrutilekhIdx);
       const chosen = item.choices[idx];
+      if (!chosen) return;
       const inp = document.getElementById('s-dictation-input');
-      if (inp && chosen) inp.value = `${chosen.wc} | ${chosen.ho}`;
+      if (inp) inp.value = `${chosen.wc} | ${chosen.ho}`;
       qLocked = true;
       qTotal++;
-      const ok = chosen && chosen.wc === item.wc && chosen.ho === item.ho;
+      const ok = chosen.uid === item.correctUid;
       if (ok) {
         qScore++;
-        btn.classList.add('bg-emerald-100', 'border-emerald-600', 'text-emerald-900');
+        btn.classList.remove('bg-white', 'border-stone-300');
+        btn.classList.add('bg-emerald-100', 'border-emerald-600', 'text-emerald-950', 'ring-2', 'ring-emerald-500');
         playChime(659.25, 0.2);
-        showQuizFeedback(true, `🎉 सही! <span class="wc-font text-base sm:text-lg">${escapeHtml(item.answerText)}</span>`);
+        showQuizFeedback(true, `✅ सही उत्तर! <span class="wc-font text-base sm:text-lg">${escapeHtml(item.answerText)}</span>`);
       } else {
-        btn.classList.add('bg-rose-100', 'border-rose-500', 'text-rose-900');
+        btn.classList.remove('bg-white', 'border-stone-300');
+        btn.classList.add('bg-rose-100', 'border-rose-500', 'text-rose-950');
         playChime(293.66, 0.22);
         showQuizFeedback(false, `❌ सही उत्तर: <span class="wc-font text-base sm:text-lg">${escapeHtml(item.answerText)}</span>`);
       }
@@ -3906,7 +3933,7 @@
     }
 
     function revealShrutilekhAnswer() {
-      const item = getShrutilekhItem(shrutilekhIdx);
+      const item = activeShrutilekhQ || getShrutilekhItem(shrutilekhIdx);
       const inp = document.getElementById('s-dictation-input');
       if (inp) inp.value = `${item.wc} | ${item.ho}`;
       showQuizFeedback(true, `💡 4-भाषा उत्तर: <span class="wc-font text-base sm:text-lg">${escapeHtml(item.answerText)}</span>`);
@@ -3919,7 +3946,8 @@
       const deck = (typeof QUIZ_DECK !== 'undefined' && QUIZ_DECK.length) ? QUIZ_DECK : DICTIONARY;
       const prog = document.getElementById('quiz-progress-badge');
       if (prog) prog.textContent = `4-भाषा क्विज़ • प्रश्न #${qTotal + 1} / ${deck.length}`;
-      const q = getReadQuestion(readIdx);
+      activeReadQ = getReadQuestion(readIdx);
+      const q = activeReadQ;
       const wcEl = document.getElementById('q-read-wc');
       if (wcEl) wcEl.textContent = q.wc;
       const promptEl = document.getElementById('q-read-en-prompt');
@@ -3931,23 +3959,26 @@
     }
 
     function speakCurrentQuizWord(btn) {
-      speakHo(getReadQuestion(readIdx).spoken, btn);
+      const q = activeReadQ || getReadQuestion(readIdx);
+      speakHo(q.spoken, btn);
     }
 
     function answerReadQuiz(btn, chosenIdx) {
       if (qLocked) return;
       qLocked = true;
       qTotal++;
-      const q = getReadQuestion(readIdx);
+      const q = activeReadQ || getReadQuestion(readIdx);
       const chosenObj = q.options[chosenIdx];
-      const ok = chosenObj && chosenObj.fullText === q.answer;
+      const ok = Boolean(chosenObj && chosenObj.uid === q.correctUid);
       if (ok) {
         qScore++;
-        btn.classList.add('bg-emerald-100', 'border-emerald-600', 'text-emerald-900');
+        btn.classList.remove('bg-white', 'border-stone-300');
+        btn.classList.add('bg-emerald-100', 'border-emerald-600', 'text-emerald-950', 'ring-2', 'ring-emerald-500');
         playChime(659.25, 0.2);
-        showQuizFeedback(true, `🎉 सही! <span class="wc-font text-base sm:text-lg">${escapeHtml(q.answer)}</span>`);
+        showQuizFeedback(true, `✅ सही उत्तर! <span class="wc-font text-base sm:text-lg">${escapeHtml(q.answer)}</span>`);
       } else {
-        btn.classList.add('bg-rose-100', 'border-rose-500', 'text-rose-900');
+        btn.classList.remove('bg-white', 'border-stone-300');
+        btn.classList.add('bg-rose-100', 'border-rose-500', 'text-rose-950');
         playChime(293.66, 0.22);
         showQuizFeedback(false, `❌ सही उत्तर: <span class="wc-font text-base sm:text-lg">${escapeHtml(q.answer)}</span>`);
       }
@@ -3962,7 +3993,8 @@
       const deck = (typeof QUIZ_DECK !== 'undefined' && QUIZ_DECK.length) ? QUIZ_DECK : DICTIONARY;
       const prog = document.getElementById('quiz-progress-badge');
       if (prog) prog.textContent = `4-भाषा ऑडियो क्विज़ • प्रश्न #${qTotal + 1} / ${deck.length}`;
-      const q = getListenQuestion(listenIdx);
+      activeListenQ = getListenQuestion(listenIdx);
+      const q = activeListenQ;
       const hintEl = document.getElementById('q-listen-hint');
       if (hintEl) hintEl.textContent = q.hint;
       const optsEl = document.getElementById('q-listen-options');
@@ -3972,23 +4004,26 @@
     }
 
     function speakCurrentListenWord(btn) {
-      speakHo(getListenQuestion(listenIdx).spoken, btn);
+      const q = activeListenQ || getListenQuestion(listenIdx);
+      speakHo(q.spoken, btn);
     }
 
     function answerListenQuiz(btn, chosenOptIdx) {
       if (qLocked) return;
       qLocked = true;
       qTotal++;
-      const q = getListenQuestion(listenIdx);
+      const q = activeListenQ || getListenQuestion(listenIdx);
       const chosenObj = q.opts[chosenOptIdx];
-      const ok = chosenObj && chosenObj.wc === q.wc && chosenObj.ho === q.ho;
+      const ok = Boolean(chosenObj && chosenObj.uid === q.correctUid);
       if (ok) {
         qScore++;
-        btn.classList.add('bg-emerald-100', 'border-emerald-600');
+        btn.classList.remove('bg-white', 'border-stone-300');
+        btn.classList.add('bg-emerald-100', 'border-emerald-600', 'text-emerald-950', 'ring-2', 'ring-emerald-500');
         playChime(659.25, 0.2);
-        showQuizFeedback(true, `🎉 सही! <span class="wc-font text-base sm:text-lg">${escapeHtml(q.answerText)}</span>`);
+        showQuizFeedback(true, `✅ सही उत्तर! <span class="wc-font text-base sm:text-lg">${escapeHtml(q.answerText)}</span>`);
       } else {
-        btn.classList.add('bg-rose-100', 'border-rose-500');
+        btn.classList.remove('bg-white', 'border-stone-300');
+        btn.classList.add('bg-rose-100', 'border-rose-500', 'text-rose-950');
         playChime(293.66, 0.22);
         showQuizFeedback(false, `❌ सही उत्तर: <span class="wc-font text-base sm:text-lg">${escapeHtml(q.answerText)}</span>`);
       }
