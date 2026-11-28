@@ -103,53 +103,60 @@
     </div>
 
     <div class="max-w-7xl mx-auto px-4 py-4 sm:py-5 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-      <div class="flex items-start sm:items-center gap-3.5 sm:gap-4">
-        <!-- Circular Golden-Bordered Profile Photo with Fallback Badge & Caption Below -->
-        <div class="flex flex-col items-center shrink-0 select-none pointer-events-none">
-          <div class="relative w-16 h-16 rounded-full border-2 border-amber-400 shadow-md overflow-hidden bg-gradient-to-br from-emerald-950 to-emerald-700 flex items-center justify-center">
-            <img
-              src="https://i.ibb.co/jkD3yG60/CAF52593-677F-4BC5-A059-BBAD425454BC.jpg"
-              alt="Create by 𑢶𑣊𑣋𑣚"
-              draggable="false"
-              class="w-full h-full rounded-full object-cover block"
-              onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
-            />
-            <div class="hidden w-full h-full items-center justify-center">
-              <svg viewBox="0 0 64 64" width="64" height="64" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="𑢶𑣊𑣋𑣚">
-                <defs>
-                  <linearGradient id="headerProfileBadgeGrad" x1="0" y1="0" x2="1" y2="1">
-                    <stop offset="0%" stop-color="#064e3b" />
-                    <stop offset="100%" stop-color="#166534" />
-                  </linearGradient>
-                </defs>
-                <circle cx="32" cy="32" r="32" fill="url(#headerProfileBadgeGrad)" />
-                <text x="32" y="38" text-anchor="middle" fill="#fde68a" font-size="14" font-weight="700" font-family="'Noto Sans Warang Citi', sans-serif">𑢶𑣀𑣋𑣚</text>
-              </svg>
+      <div class="flex items-start sm:items-center justify-between gap-3.5 sm:gap-4 flex-1">
+        <div class="flex items-start sm:items-center gap-3.5 sm:gap-4">
+          <!-- Circular Golden-Bordered Profile Photo with Fallback Badge & Caption Below -->
+          <div class="flex flex-col items-center shrink-0 select-none pointer-events-none">
+            <div class="relative w-16 h-16 rounded-full border-2 border-amber-400 shadow-md overflow-hidden bg-gradient-to-br from-emerald-950 to-emerald-700 flex items-center justify-center">
+              <img
+                src="https://i.ibb.co/jkD3yG60/CAF52593-677F-4BC5-A059-BBAD425454BC.jpg"
+                alt="Create by 𑢶𑣊𑣋𑣚"
+                draggable="false"
+                class="w-full h-full rounded-full object-cover block"
+                onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+              />
+              <div class="hidden w-full h-full items-center justify-center">
+                <svg viewBox="0 0 64 64" width="64" height="64" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="𑢶𑣊𑣋𑣚">
+                  <defs>
+                    <linearGradient id="headerProfileBadgeGrad" x1="0" y1="0" x2="1" y2="1">
+                      <stop offset="0%" stop-color="#064e3b" />
+                      <stop offset="100%" stop-color="#166534" />
+                    </linearGradient>
+                  </defs>
+                  <circle cx="32" cy="32" r="32" fill="url(#headerProfileBadgeGrad)" />
+                  <text x="32" y="38" text-anchor="middle" fill="#fde68a" font-size="14" font-weight="700" font-family="'Noto Sans Warang Citi', sans-serif">𑢶𑣀𑣋𑣚</text>
+                </svg>
+              </div>
             </div>
+            <span class="mt-1 text-[11px] font-bold text-amber-200 whitespace-nowrap leading-tight">
+              Create by <span class="wc-font text-xs text-amber-300">𑢶𑣊𑣋𑣚</span>
+            </span>
           </div>
-          <span class="mt-1 text-[11px] font-bold text-amber-200 whitespace-nowrap leading-tight">
-            Create by <span class="wc-font text-xs text-amber-300">𑢶𑣊𑣋𑣚</span>
-          </span>
+
+          <div>
+            <div class="inline-flex flex-wrap items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-amber-400/40 text-amber-300 text-xs font-bold mb-1.5">
+              <span>🌿 ओत गुरु कोल लाको बोदरा विरासत</span>
+              <span>•</span>
+              <span>Unicode 18.0 (118A0–118FF)</span>
+            </div>
+            <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight flex flex-wrap items-center gap-2">
+              <span onclick="speakHo('हो एनेतो', this)" class="touch-card wc-font text-amber-300 text-3xl sm:text-4xl" title="छूकर सुनें">𑢹𑣉 𑢨𑣓𑣈𑣕𑣉</span>
+              <span>— Ho Eneto</span>
+            </h1>
+            <p class="text-emerald-100 text-xs sm:text-sm mt-1">
+              वारंग क्षिति एवं 'हो' भाषा शिक्षण ऐप (इपान बोरोङ • बेंगान बोरोङ • गिनती • गल्सा • शब्दकोश)
+            </p>
+          </div>
         </div>
 
-        <div>
-          <div class="inline-flex flex-wrap items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-amber-400/40 text-amber-300 text-xs font-bold mb-1.5">
-            <span>🌿 ओत गुरु कोल लाको बोदरा विरासत</span>
-            <span>•</span>
-            <span>Unicode 18.0 (118A0–118FF)</span>
-          </div>
-          <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight flex flex-wrap items-center gap-2">
-            <span onclick="speakHo('हो एनेतो', this)" class="touch-card wc-font text-amber-300 text-3xl sm:text-4xl" title="छूकर सुनें">𑢹𑣉 𑢨𑣓𑣈𑣕𑣉</span>
-            <span>— Ho Eneto</span>
-          </h1>
-          <p class="text-emerald-100 text-xs sm:text-sm mt-1">
-            वारंग क्षिति एवं 'हो' भाषा शिक्षण ऐप (इपान बोरोङ • बेंगान बोरोङ • गिनती • गल्सा • शब्दकोश)
-          </p>
-        </div>
+        <!-- Tablet / Medium Desktop Right Logo Icon (Aligned directly inline with Ho Eneto title row) -->
+        <a href="https://ibb.co/TDX6kHFk" target="_blank" rel="noopener noreferrer" class="hidden sm:inline-flex lg:hidden items-center justify-center shrink-0 rounded-xl border-2 border-amber-400/80 shadow-md overflow-hidden bg-white/10 p-0.5 hover:scale-105 transition self-center" title="Ho Eneto Icon">
+          <img src="https://i.ibb.co/1YV1L9wL/1795881700220.png" alt="1795881700220" class="w-16 h-16 rounded-lg object-cover block" />
+        </a>
       </div>
 
-      <!-- Quick Greetings & Desktop Top-Right Logo Icon -->
-      <div class="flex flex-wrap items-center justify-between lg:justify-end gap-3">
+      <!-- Quick Greetings & Wide Desktop Right Logo Icon -->
+      <div class="flex flex-wrap items-center gap-3 shrink-0">
         <div class="flex flex-wrap items-center gap-2">
           <div class="flex items-center bg-black/25 border border-white/15 rounded-xl overflow-hidden">
             <button type="button" onclick="speakHo('ओम् जोहार', this)" class="px-3 py-2 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs transition" title="सुनें">🔊</button>
@@ -167,9 +174,9 @@
           </div>
         </div>
 
-        <!-- Desktop Top-Right Logo Icon (Placed inline in the right corner without extra vertical space) -->
-        <a href="https://ibb.co/TDX6kHFk" target="_blank" rel="noopener noreferrer" class="hidden sm:inline-flex items-center justify-center shrink-0 rounded-xl border-2 border-amber-400/80 shadow-md overflow-hidden bg-white/10 p-0.5 hover:scale-105 transition" title="Ho Eneto Icon">
-          <img src="https://i.ibb.co/1YV1L9wL/1795881700220.png" alt="1795881700220" class="w-14 h-14 rounded-lg object-cover block" />
+        <!-- Wide Desktop Right Logo Icon -->
+        <a href="https://ibb.co/TDX6kHFk" target="_blank" rel="noopener noreferrer" class="hidden lg:inline-flex items-center justify-center shrink-0 rounded-xl border-2 border-amber-400/80 shadow-md overflow-hidden bg-white/10 p-0.5 hover:scale-105 transition" title="Ho Eneto Icon">
+          <img src="https://i.ibb.co/1YV1L9wL/1795881700220.png" alt="1795881700220" class="w-16 h-16 rounded-lg object-cover block" />
         </a>
       </div>
     </div>
