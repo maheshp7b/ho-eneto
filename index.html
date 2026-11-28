@@ -95,10 +95,10 @@
 
   <!-- Header & Global Touch-to-Speak Controls -->
   <header class="bg-gradient-to-r from-[#0f3d21] via-[#14532d] to-[#166534] text-white shadow-lg border-b-4 border-amber-500">
-    <!-- Top Centre / Right Logo Icon -->
-    <div class="max-w-7xl mx-auto px-4 pt-3 pb-1 flex justify-center sm:justify-end">
+    <!-- Mobile Only Top-Centre Logo Icon (sm:hidden so desktop has zero extra top space) -->
+    <div class="sm:hidden max-w-7xl mx-auto px-4 pt-3 pb-0 flex justify-center">
       <a href="https://ibb.co/TDX6kHFk" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center rounded-xl border-2 border-amber-400/80 shadow-md overflow-hidden bg-white/10 p-0.5 hover:scale-105 transition" title="Ho Eneto Icon">
-        <img src="https://i.ibb.co/1YV1L9wL/1795881700220.png" alt="1795881700220" class="w-12 h-12 sm:w-14 sm:h-14 rounded-lg object-cover block" />
+        <img src="https://i.ibb.co/1YV1L9wL/1795881700220.png" alt="1795881700220" class="w-12 h-12 rounded-lg object-cover block" />
       </a>
     </div>
 
@@ -148,22 +148,29 @@
         </div>
       </div>
 
-      <!-- Quick Greetings with Touch-to-Speak & Copy -->
-      <div class="flex flex-wrap items-center gap-2">
-        <div class="flex items-center bg-black/25 border border-white/15 rounded-xl overflow-hidden">
-          <button type="button" onclick="speakHo('ओम् जोहार', this)" class="px-3 py-2 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs transition" title="सुनें">🔊</button>
-          <button type="button" onclick="copyText('𑢩𑣿 𑢮𑣉𑣙𑣁𑣜', 'ओम् जोहार कॉपी किया गया')" class="px-3 py-2 hover:bg-white/10 text-xs sm:text-sm flex items-center gap-1.5 transition">
-            <span class="wc-font text-amber-300 text-base font-bold">𑢩𑣿 𑢮𑣉𑣙𑣁𑣜</span>
-            <span>ओम् जोहार</span>
-          </button>
+      <!-- Quick Greetings & Desktop Top-Right Logo Icon -->
+      <div class="flex flex-wrap items-center justify-between lg:justify-end gap-3">
+        <div class="flex flex-wrap items-center gap-2">
+          <div class="flex items-center bg-black/25 border border-white/15 rounded-xl overflow-hidden">
+            <button type="button" onclick="speakHo('ओम् जोहार', this)" class="px-3 py-2 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs transition" title="सुनें">🔊</button>
+            <button type="button" onclick="copyText('𑢩𑣿 𑢮𑣉𑣙𑣁𑣜', 'ओम् जोहार कॉपी किया गया')" class="px-3 py-2 hover:bg-white/10 text-xs sm:text-sm flex items-center gap-1.5 transition">
+              <span class="wc-font text-amber-300 text-base font-bold">𑢩𑣿 𑢮𑣉𑣙𑣁𑣜</span>
+              <span>ओम् जोहार</span>
+            </button>
+          </div>
+          <div class="flex items-center bg-black/25 border border-white/15 rounded-xl overflow-hidden">
+            <button type="button" onclick="speakHo('सेवा जोहार', this)" class="px-3 py-2 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs transition" title="सुनें">🔊</button>
+            <button type="button" onclick="copyText('𑢾𑣈𑣟𑣁 𑢮𑣉𑣙𑣁𑣜', 'सेवा जोहार कॉपी किया गया')" class="px-3 py-2 hover:bg-white/10 text-xs sm:text-sm flex items-center gap-1.5 transition">
+              <span class="wc-font text-amber-300 text-base font-bold">𑢾𑣈𑣟𑣁 𑢮𑣉𑣙𑣁𑣜</span>
+              <span>सेवा जोहार</span>
+            </button>
+          </div>
         </div>
-        <div class="flex items-center bg-black/25 border border-white/15 rounded-xl overflow-hidden">
-          <button type="button" onclick="speakHo('सेवा जोहार', this)" class="px-3 py-2 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs transition" title="सुनें">🔊</button>
-          <button type="button" onclick="copyText('𑢾𑣈𑣟𑣁 𑢮𑣉𑣙𑣁𑣜', 'सेवा जोहार कॉपी किया गया')" class="px-3 py-2 hover:bg-white/10 text-xs sm:text-sm flex items-center gap-1.5 transition">
-            <span class="wc-font text-amber-300 text-base font-bold">𑢾𑣈𑣟𑣁 𑢮𑣉𑣙𑣁𑣜</span>
-            <span>सेवा जोहार</span>
-          </button>
-        </div>
+
+        <!-- Desktop Top-Right Logo Icon (Placed inline in the right corner without extra vertical space) -->
+        <a href="https://ibb.co/TDX6kHFk" target="_blank" rel="noopener noreferrer" class="hidden sm:inline-flex items-center justify-center shrink-0 rounded-xl border-2 border-amber-400/80 shadow-md overflow-hidden bg-white/10 p-0.5 hover:scale-105 transition" title="Ho Eneto Icon">
+          <img src="https://i.ibb.co/1YV1L9wL/1795881700220.png" alt="1795881700220" class="w-14 h-14 rounded-lg object-cover block" />
+        </a>
       </div>
     </div>
 
